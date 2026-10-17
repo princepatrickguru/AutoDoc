@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoDoc Nigeria | Triage Prototype</title>
+<style>
+:root{--navy:#12304a;--blue:#1e6a8d;--paper:#f4f7fa;--ink:#182b3a;--muted:#5b6b78;--green:#197747;--yellow:#946200;--red:#b42318;--border:#d8e1e8}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5}
+header{background:var(--navy);color:white;padding:24px 16px}.wrap{max-width:900px;margin:auto}.brand{font-size:1.75rem;font-weight:800}.tagline{color:#d8eaf5}
+main{padding:22px 16px 42px}.notice{border-left:5px solid #d39a18;background:#fff8e6;padding:12px 14px;border-radius:8px;margin-bottom:18px}
+.panel{background:white;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:18px;box-shadow:0 4px 14px #12304a0a}
+h1{font-size:1.35rem;margin:0 0 8px}h2{font-size:1.1rem;margin:0 0 12px}p{margin-top:0}
+label,legend{font-weight:700;display:block;margin-bottom:7px}textarea,select{width:100%;border:1px solid #b9c8d3;border-radius:9px;padding:12px;font:inherit;color:var(--ink);background:white}
+textarea{min-height:115px;resize:vertical}fieldset{border:1px solid var(--border);border-radius:10px;padding:14px;margin:16px 0}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.check{display:flex;align-items:flex-start;gap:9px;font-weight:500;margin:0}.check input{margin-top:5px}
+.small{font-size:.9rem;color:var(--muted)}button{border:0;border-radius:9px;background:var(--blue);color:white;font:inherit;font-weight:750;padding:12px 18px;cursor:pointer;width:100%}
+button:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #78b9dd;outline-offset:2px}
+#result{display:none}.result-top{display:flex;gap:12px;align-items:center;margin-bottom:12px}.level{border-radius:999px;padding:6px 12px;font-size:.85rem;font-weight:900;letter-spacing:.5px}
+.green{background:#e8f6ed;color:var(--green)}.yellow{background:#fff4d6;color:var(--yellow)}.red{background:#ffebe9;color:var(--red)}
+.result-green{border-top:6px solid var(--green)}.result-yellow{border-top:6px solid #e0a000}.result-red{border-top:6px solid var(--red)}
+ul{padding-left:22px}.footer{color:var(--muted);font-size:.85rem;text-align:center;padding-top:10px}
+@media(min-width:640px){button{width:auto;min-width:190px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="brand">AutoDoc Nigeria</div><div class="tagline">A symptom triage and next-step guidance prototype</div></div></header>
+<main class="wrap">
+<div class="notice"><strong>Prototype only:</strong> This demo does not diagnose illness and is not a substitute for a qualified health professional. If someone may be in immediate danger, seek emergency medical help now; do not wait for this app.</div>
+<section class="panel">
+<h1>Describe what is happening</h1><p class="small">Enter symptoms in your own words. This demo uses a small set of rules and can miss serious conditions.</p>
+<label for="language">Language for guidance</label><select id="language"><option value="en">English</option><option value="pcm">Nigerian Pidgin (basic demo wording)</option></select>
+<div style="margin-top:16px"><label for="symptoms">Symptoms / wetin dey happen</label><textarea id="symptoms" placeholder="Example: I have a fever and headache. I am alert and can drink fluids."></textarea></div>
+<fieldset><legend>Does the person have any of these warning signs?</legend><p class="small">Select every sign that applies. These selections take priority over the free-text description.</p>
+<div class="checks">
+<label class="check"><input type="checkbox" value="breathing" class="warning"> Severe difficulty breathing</label>
+<label class="check"><input type="checkbox" value="swelling" class="warning"> Swelling of tongue/throat or lips with breathing/swallowing difficulty</label>
+<label class="check"><input type="checkbox" value="confusion" class="warning"> New confusion, collapse, or difficult to wake</label>
+<label class="check"><input type="checkbox" value="chest" class="warning"> Sudden chest pain/heaviness, especially with breathlessness</label>
+<label class="check"><input type="checkbox" value="bleeding" class="warning"> Severe bleeding or serious injury</label>
+<label class="check"><input type="checkbox" value="seizure" class="warning"> Ongoing seizure or repeated seizures without recovery</label>
+</div></fieldset>
+<button id="assess">Show demo triage result</button><p class="small" style="margin:12px 0 0">No account is needed. This page does not send symptoms to a server.</p>
+</section>
+<section id="result" class="panel" aria-live="polite" aria-atomic="true">
+<div class="result-top"><span id="level" class="level">YELLOW</span><div><h2 id="resultTitle" style="margin:0">Result</h2><div id="resultSubtitle" class="small"></div></div></div>
+<p id="resultText"></p><h2 id="nextHeading">Suggested next steps</h2><ul id="steps"></ul><p id="ruleNote" class="small"></p>
+</section><div class="footer">AutoDoc Nigeria · TriTech · Educational prototype — not clinically validated</div>
+</main>
+<script>
+const copy={
+en:{
+redTitle:"Emergency warning sign selected",redSubtitle:"RED · Seek emergency medical help now",
+redText:"The selected warning sign may indicate a life-threatening emergency. Do not wait for this prototype to assess the situation further.",
+redSteps:["Contact local emergency services or go to the nearest emergency department immediately.","Stay with the person and follow instructions from emergency professionals.","Do not give food, drink, or oral medicine to someone who is unconscious or not fully alert.","For a suspected severe allergic reaction, use the person's prescribed adrenaline auto-injector if available and follow its instructions."],
+yellowTitle:"Needs medical assessment",yellowSubtitle:"YELLOW · Arrange prompt professional assessment",
+yellowText:"The limited demo rules suggest the symptoms need professional assessment. This is not a diagnosis, and the app may miss warning signs.",
+yellowSteps:["Contact a qualified health professional or clinic for advice and assessment.","Monitor for new, severe, or worsening symptoms.","Seek emergency help immediately if a warning sign develops or the person becomes very unwell."],
+greenTitle:"No listed emergency sign selected",greenSubtitle:"GREEN · Lower urgency under this demo's limited rules",
+greenText:"No listed emergency warning sign was selected, but that does not prove the condition is safe or minor. This prototype cannot reliably rule out emergencies.",
+greenSteps:["Consider rest and fluids if appropriate and safe for the person.","Seek professional advice if symptoms persist, worsen, or concern you.","Seek emergency help immediately if any warning sign appears."],
+empty:"Please describe the symptoms or select a warning sign.",
+note:"Prototype rule: selected warning signs override free-text symptoms. Free text is checked for only a few broad terms and is not a medical assessment."
+},
+pcm:{
+redTitle:"You select emergency warning sign",redSubtitle:"RED · Find emergency medical help now",
+redText:"The warning sign fit show say emergency fit dey happen. No wait for this demo app to decide wetin happen.",
+redSteps:["Call local emergency help or go emergency department now.","Stay with the person and follow instruction from health professionals.","No give food, drink, or medicine by mouth to person wey no dey fully awake.","If na serious allergy reaction and the person get their prescribed adrenaline auto-injector, use am according to the instructions."],
+yellowTitle:"Person need medical check",yellowSubtitle:"YELLOW · Arrange medical assessment soon",
+yellowText:"This small demo rule suggest say health professional suppose check the symptoms. E no be diagnosis, and the app fit miss warning signs.",
+yellowSteps:["Contact qualified health worker or clinic for advice and check-up.","Watch whether new symptoms show or the condition get worse.","If any emergency warning sign show, seek emergency help immediately."],
+greenTitle:"No listed emergency sign selected",greenSubtitle:"GREEN · Lower urgency only under this limited demo rule",
+greenText:"You no select any listed emergency warning sign, but that no prove say the condition small or safe. This demo no fit rule out emergency well.",
+greenSteps:["Rest and drink fluids if e dey appropriate and safe.","Get advice from health professional if symptoms continue, get worse, or worry you.","If any warning sign show, seek emergency help immediately."],
+empty:"Abeg describe the symptoms or select a warning sign.",
+note:"Demo rule: selected warning signs get priority over symptom text. Text check no be medical assessment."
+}};
+const emergencyWords=[/\b(can't|cannot|unable to|difficulty|trouble)\s+(breathe|breathing)\b/i,/\b(shortness of breath|chest pain|chest heaviness|confused|confusion|unconscious|hard to wake|seizure|severe bleeding)\b/i,/\b(swollen tongue|tongue swelling|throat swelling|swollen throat)\b/i];
+const yellowWords=[/\b(fever|vomit|vomiting|diarrhoea|diarrhea|dehydration|severe pain|worsening|worse)\b/i];
+function assess(){
+ const language=document.getElementById("language").value, words=document.getElementById("symptoms").value.trim();
+ const selected=[...document.querySelectorAll(".warning:checked")]; const c=copy[language], result=document.getElementById("result");
+ if(!words&&!selected.length){alert(c.empty);document.getElementById("symptoms").focus();return;}
+ let level,title,subtitle,body,steps;
+ if(selected.length||emergencyWords.some(rx=>rx.test(words))){level="RED";title=c.redTitle;subtitle=c.redSubtitle;body=c.redText;steps=c.redSteps;}
+ else if(yellowWords.some(rx=>rx.test(words))){level="YELLOW";title=c.yellowTitle;subtitle=c.yellowSubtitle;body=c.yellowText;steps=c.yellowSteps;}
+ else{level="GREEN";title=c.greenTitle;subtitle=c.greenSubtitle;body=c.greenText;steps=c.greenSteps;}
+ const levelEl=document.getElementById("level");levelEl.textContent=level;levelEl.className="level "+level.toLowerCase();
+ result.className="panel result-"+level.toLowerCase();document.getElementById("resultTitle").textContent=title;
+ document.getElementById("resultSubtitle").textContent=subtitle;document.getElementById("resultText").textContent=body;
+ document.getElementById("nextHeading").textContent=language==="pcm"?"Wetin you fit do next":"Suggested next steps";
+ document.getElementById("ruleNote").textContent=c.note;
+ const list=document.getElementById("steps");list.replaceChildren();steps.forEach(step=>{const li=document.createElement("li");li.textContent=step;list.appendChild(li);});
+ result.style.display="block";result.scrollIntoView({behavior:"smooth",block:"start"});
+}
+document.getElementById("assess").addEventListener("click",assess);
+</script>
+</body></html>
