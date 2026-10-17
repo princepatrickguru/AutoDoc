@@ -1,18 +1,47 @@
-| Test ID | Scenario | Expected Result | Observed Status | Notes |
-|---|---|---|---|---|
-| T01 | Fever / suspected malaria | Yellow | Not tested | Symptoms alone cannot confirm malaria. |
-| T02 | Vomiting / diarrhoea | Yellow* | Not tested | Check for dehydration and emergency warning signs. |
-| T03 | Severe allergic reaction | Red | Not tested | Immediate emergency assistance required. |
-| T04 | Fever with confusion | Red | Not tested | Immediate emergency assessment required. |
-| T05 | Chest pain with possible emergency signs | Red | Not tested | Seek immediate emergency assistance. |
-| T06 | Mild headache | Green* | Not tested | Only if approved rules find no warning signs. |
+Symptom 1: Fever / Suspected Malaria
 
-## Testing notes
+Expected Result: Yellow
 
-- These are proposed expected results, not clinically validated rules.
-- "Not tested" means the app has not yet been tested with that scenario.
-- Record the actual output and any incorrect or unsafe guidance after testing.
-- Any emergency scenario incorrectly classified as Green or Yellow must be flagged as a critical safety failure.
-- Have a qualified health professional review the scenarios and expected results before real-world use.
+Observed Status: Not tested
 
-*The expected level depends on the complete symptoms and approved triage rul
+Notes: Recommend assessment by a health professional. Do not automatically diagnose malaria.
+
+Symptom 2: Vomiting and Diarrhoea
+
+Expected Result: Yellow, if no emergency warning signs are present
+
+Observed Status: Not tested
+
+Notes: Provide appropriate hydration guidance and explain when urgent medical care is needed.
+
+Symptom 3: Severe Allergic Reaction
+
+Expected Result: Red
+
+Observed Status: Not tested
+
+Notes: Tongue or throat swelling with difficulty breathing should trigger immediate emergency guidance.
+
+Symptom 4: Fever with Confusion
+
+Expected Result: Red
+
+Observed Status: Not tested
+
+Notes: New confusion or reduced alertness should trigger immediate emergency guidance.
+
+Symptom 5: Chest Pain
+
+Expected Result: Red
+
+Observed Status: Not tested
+
+Notes: Sudden chest pain or heaviness, especially with shortness of breath, should trigger immediate emergency guidance.
+
+Symptom 6: Mild Headache
+
+Expected Result: Green, only if approved triage rules confirm there are no warning signs
+
+Observed Status: Not tested
+
+Notes: Provide cautious self-care advice and explain when medical attention is needed.

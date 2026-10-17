@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#087f5b">
+
+  <title>AutoDoc Nigeria | Team TriTech</title>
+
+  <!-- Tailwind CSS browser CDN: prototype only -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="min-h-screen bg-slate-50 pb-24 text-slate-800 md:pb-0">
+
+  <div id="error-toast" role="alert" aria-live="assertive" aria-atomic="true"
+    class="fixed inset-x-4 top-4 z-50 mx-auto flex max-w-lg items-start justify-between gap-4 rounded-xl border border-red-200 bg-white p-4 text-sm font-medium text-red-900 shadow-xl"
+    hidden>
+    <p id="error-toast-message"></p>
+    <button id="dismiss-error-toast" type="button" aria-label="Dismiss error"
+      class="shrink-0 rounded p-1 text-lg leading-none text-red-700 hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
+      &times;
+    </button>
+  </div>
+
+  <!-- APP HEADER -->
+  <header id="home" class="bg-emerald-700 text-white">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+      <a href="#home" class="flex min-w-0 items-center gap-3">
+        <span class="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl text-emerald-700">
+          ✚
+        </span>
+        <span class="min-w-0">
+          <span class="block text-lg font-extrabold tracking-tight sm:text-xl">
+            AutoDoc Nigeria
+          </span>
+          <span class="block text-xs text-emerald-100">
+            Your health companion
+          </span>
+        </span>
+      </a>
+
+      <span class="hidden rounded-full bg-emerald-600 px-3 py-2 text-xs font-semibold sm:inline-flex">
+        Team TriTech
+      </span>
+    </nav>
+  </header>
+
+  <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
+
+    <!-- HOME / HERO -->
+    <section class="mb-7 sm:mb-9">
+      <p class="text-sm font-bold text-emerald-700">
+        HEALTH GUIDANCE MADE ACCESSIBLE
+      </p>
+
+      <h1 class="mt-3 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+        How are you feeling today?
+      </h1>
+
+      <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
+        Describe your symptoms in English or Nigerian Pidgin.
+        Get guidance on the next steps and find healthcare facilities.
+      </p>
+    </section>
+
+    <!-- SYMPTOM FORM -->
+    <section id="symptom-section"
+      class="scroll-mt-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-7">
+
+      <div class="flex items-start gap-3">
+        <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-xl">
+          🩺
+        </span>
+        <div>
+          <h2 class="text-lg font-bold sm:text-xl">Check your symptoms</h2>
+          <p class="mt-1 text-sm text-slate-500">
+            Tell us what you are experiencing.
+          </p>
+        </div>
+      </div>
+
+      <form id="symptom-form" class="mt-5">
+        <label for="symptoms" class="mb-2 block text-sm font-semibold">
+          Describe your symptoms
+        </label>
+
+        <textarea
+          id="symptoms"
+          name="symptoms"
+          required
+          maxlength="2000"
+          class="min-h-36 w-full rounded-xl border border-slate-300 bg-white p-4 text-base leading-6 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
+          placeholder="Example: My head dey pain me and I dey feel dizzy..."
+        ></textarea>
+
+        <p class="mt-2 text-xs leading-5 text-slate-500">
+          Include when the symptoms started and how severe they are.
+          Avoid entering your name or personal identification details.
+        </p>
+
+        <button
+          id="submit-btn"
+          type="submit"
+          class="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 font-bold text-white transition hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 active:scale-[0.99] disabled:cursor-wait disabled:opacity-60 sm:w-auto sm:min-w-52"
+        >
+          <span id="button-text">Check my symptoms</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      </form>
+
+      <!-- MEDICAL SAFETY NOTICE -->
+      <div class="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
+        <div class="flex items-start gap-3">
+          <span aria-hidden="true" class="text-xl">⚠️</span>
+          <div>
+            <h3 class="font-bold text-amber-950">Important health notice</h3>
+            <p class="mt-1 text-sm leading-6 text-amber-900">
+              This tool does not diagnose medical conditions. If you have
+              severe difficulty breathing, become unconscious, or experience
+              another life-threatening emergency, seek emergency medical help
+              immediately. Do not wait for an online assessment.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE STATUS -->
+    <p id="status" role="status" aria-live="polite"
+      class="mt-4 text-sm leading-6 text-slate-600"></p>
+
+    <!-- RESULTS -->
+    <section id="results" class="mt-6 space-y-5 sm:mt-8 sm:space-y-6" hidden>
+
+      <!-- EMERGENCY BANNER -->
+      <div id="emergency-banner" role="alert"
+        class="scroll-mt-5 rounded-2xl border-2 border-red-600 bg-red-50 p-5 sm:p-6"
+        hidden>
+        <div class="flex items-start gap-3">
+          <span class="text-2xl" aria-hidden="true">🚨</span>
+          <div>
+            <h2 class="text-xl font-extrabold text-red-800">
+              Emergency — Act now
+            </h2>
+            <p id="emergency-message" class="mt-2 leading-7 text-red-900"></p>
+            <p class="mt-3 text-sm font-semibold text-red-800">
+              Do not delay emergency care while using this application.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRIAGE RESULT -->
+      <article id="triage-card"
+        class="scroll-mt-5 rounded-2xl border border-emerald-200 border-l-4 border-l-emerald-600 bg-emerald-50 p-5 sm:p-6">
+
+        <p id="triage-label"
+          class="text-xs font-bold uppercase tracking-widest text-emerald-800">
+          Urgency assessment
+        </p>
+
+        <h2 id="triage-title" class="mt-2 text-2xl font-extrabold"></h2>
+
+        <p id="triage-summary" class="mt-3 leading-7"></p>
+
+        <p id="triage-disclaimer"
+          class="mt-3 text-sm leading-6 text-slate-600"></p>
+      </article>
+
+      <!-- GUIDANCE AND FACILITIES -->
+      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+
+        <!-- GUIDANCE -->
+        <article id="guidance"
+          class="scroll-mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+
+          <div class="flex items-center gap-3">
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-xl">
+              🩹
+            </span>
+            <div>
+              <h2 class="text-lg font-bold sm:text-xl">First-aid guidance</h2>
+              <p class="text-sm text-slate-500">Recommended next steps</p>
+            </div>
+          </div>
+
+          <ol id="first-aid-list"
+            class="mt-5 list-decimal space-y-3 pl-5 leading-7"></ol>
+        </article>
+
+        <!-- FACILITIES -->
+        <article id="facilities"
+          class="scroll-mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+
+          <div class="flex items-center gap-3">
+            <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-xl">
+              🏥
+            </span>
+            <div>
+              <h2 class="text-lg font-bold sm:text-xl">Health facilities</h2>
+              <p class="text-sm text-slate-500">Facility information from the service</p>
+            </div>
+          </div>
+
+          <div id="facility-list" class="mt-4 divide-y divide-slate-100"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PROFILE / ABOUT DESTINATION -->
+    <section id="profile"
+      class="mt-8 scroll-mt-5 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
+      <div class="flex items-center gap-3">
+        <span class="flex size-11 items-center justify-center rounded-xl bg-emerald-100 text-xl">
+          💚
+        </span>
+        <div>
+          <h2 class="text-lg font-bold">About AutoDoc Nigeria</h2>
+          <p class="text-sm text-slate-500">Built by Team TriTech</p>
+        </div>
+      </div>
+
+      <p class="mt-4 text-sm leading-6 text-slate-600">
+        AutoDoc Nigeria aims to make health information and emergency
+        guidance easier to access. It is not a replacement for qualified
+        healthcare professionals.
+      </p>
+
+      <button id="privacy-button" type="button"
+        class="mt-4 min-h-11 rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
+        Privacy reminder
+      </button>
+
+      <p id="privacy-message" class="mt-3 text-sm leading-6 text-slate-600" hidden>
+        Share only the health information necessary for guidance. Avoid
+        entering identifying details. Review the application's privacy
+        policy before submitting real health information.
+      </p>
+    </section>
+  </main>
+
+  <!--
+    MOBILE APP-STYLE BOTTOM NAVIGATION
+
+    Fixed on mobile.
+    Normal footer navigation on medium and larger screens.
+  -->
+  <footer class="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:static md:border-t md:bg-white md:pb-0 md:backdrop-blur-none">
+
+    <nav aria-label="Main navigation"
+      class="mx-auto grid max-w-6xl grid-cols-4 px-1 sm:px-4 md:px-6">
+
+      <button type="button" data-target="home" data-nav="home"
+        aria-current="page"
+        class="nav-item flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-emerald-700 transition hover:bg-emerald-50 focus-visible:outline-2 focus-visible:outline-emerald-700 md:my-2">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.8" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>
+        </svg>
+        <span class="text-[11px] font-bold sm:text-xs">Home</span>
+      </button>
+
+      <button type="button" data-target="guidance" data-nav="guidance"
+        class="nav-item flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-2 focus-visible:outline-emerald-700 md:my-2">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.8" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M8 4H5a2 2 0 0 0-2 2v14h18V6a2 2 0 0 0-2-2h-3"/>
+          <rect x="8" y="2" width="8" height="5" rx="1.5"/>
+          <path stroke-linecap="round" d="M7 12h10M7 16h7"/>
+        </svg>
+        <span class="text-[11px] font-semibold sm:text-xs">Guidance</span>
+      </button>
+
+      <button type="button" data-target="facilities" data-nav="facilities"
+        class="nav-item flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-2 focus-visible:outline-emerald-700 md:my-2">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.8" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3 21V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14M8 21v-5h8v5"/>
+          <path stroke-linecap="round" d="M12 8v6m-3-3h6"/>
+        </svg>
+        <span class="text-[11px] font-semibold sm:text-xs">Facilities</span>
+      </button>
+
+      <button type="button" data-target="profile" data-nav="profile"
+        class="nav-item flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-2 focus-visible:outline-emerald-700 md:my-2">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="1.8" class="size-6">
+          <circle cx="12" cy="8" r="4"/>
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M4 21a8 8 0 0 1 16 0"/>
+        </svg>
+        <span class="text-[11px] font-semibold sm:text-xs">Profile</span>
+      </button>
+
+    </nav>
+  </footer>
+
+  <script>
+    const API_URL = new URL("api/triage.php", window.location.href);
+
+    const form = document.getElementById("symptom-form");
+    const input = document.getElementById("symptoms");
+    const button = document.getElementById("submit-btn");
+    const buttonText = document.getElementById("button-text");
+    const status = document.getElementById("status");
+    const errorToast = document.getElementById("error-toast");
+    const errorToastMessage = document.getElementById("error-toast-message");
+    const dismissErrorToast = document.getElementById("dismiss-error-toast");
+    const results = document.getElementById("results");
+    let errorToastTimeout;
+
+    function hideErrorToast() {
+      window.clearTimeout(errorToastTimeout);
+      errorToast.hidden = true;
+    }
+
+    function showErrorToast(message) {
+      window.clearTimeout(errorToastTimeout);
+      errorToastMessage.textContent = message;
+      errorToast.hidden = false;
+      errorToastTimeout = window.setTimeout(() => {
+        errorToast.hidden = true;
+      }, 7000);
+    }
+
+    dismissErrorToast.addEventListener("click", hideErrorToast);
+
+    const emergencyBanner = document.getElementById("emergency-banner");
+    const emergencyMessage = document.getElementById("emergency-message");
+    const triageCard = document.getElementById("triage-card");
+    const triageLabel = document.getElementById("triage-label");
+    const triageTitle = document.getElementById("triage-title");
+    const triageSummary = document.getElementById("triage-summary");
+    const triageDisclaimer = document.getElementById("triage-disclaimer");
+    const firstAidList = document.getElementById("first-aid-list");
+    const facilityList = document.getElementById("facility-list");
+
+    const navItems = document.querySelectorAll(".nav-item");
+
+    const levels = {
+      green: {
+        title: "🟢 Green — Lower urgency",
+        card: "rounded-2xl border border-emerald-200 border-l-4 border-l-emerald-600 bg-emerald-50 p-5 sm:p-6",
+        label: "text-xs font-bold uppercase tracking-widest text-emerald-800"
+      },
+      yellow: {
+        title: "🟡 Yellow — Medical review needed",
+        card: "rounded-2xl border border-amber-200 border-l-4 border-l-amber-500 bg-amber-50 p-5 sm:p-6",
+        label: "text-xs font-bold uppercase tracking-widest text-amber-800"
+      },
+      red: {
+        title: "🔴 Red — Emergency",
+        card: "rounded-2xl border border-red-200 border-l-4 border-l-red-600 bg-red-50 p-5 sm:p-6",
+        label: "text-xs font-bold uppercase tracking-widest text-red-800"
+      }
+    };
+
+    // MOBILE APP NAVIGATION
+    function setActiveNav(activeName) {
+      navItems.forEach((item) => {
+        const isActive = item.dataset.nav === activeName;
+
+        item.classList.toggle("text-emerald-700", isActive);
+        item.classList.toggle("text-slate-500", !isActive);
+        item.classList.toggle("font-bold", isActive);
+
+        if (isActive) {
+          item.setAttribute("aria-current", "page");
+        } else {
+          item.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    function goToSection(target) {
+      const section = document.getElementById(target);
+
+      if (!section) return;
+
+      // Results destinations require an assessment first.
+      if (
+        (target === "guidance" || target === "facilities") &&
+        results.hidden
+      ) {
+        status.textContent =
+          "Check your symptoms first to view guidance and facility results.";
+
+        document.getElementById("symptom-section").scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+        setActiveNav("home");
+        input.focus({ preventScroll: true });
+        return;
+      }
+
+      section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
+      setActiveNav(
+        target === "guidance" || target === "facilities"
+          ? target
+          : target === "profile"
+            ? "profile"
+            : "home"
+      );
+    }
+
+    navItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        goToSection(item.dataset.target);
+      });
+    });
+
+    // SYMPTOM FORM / PHP BACKEND
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const symptoms = input.value.trim();
+
+      if (!symptoms) {
+        showErrorToast("Please describe your symptoms first.");
+        input.focus();
+        return;
+      }
+
+      hideErrorToast();
+      button.disabled = true;
+      buttonText.textContent = "Checking...";
+      status.textContent = "Contacting the health service...";
+      results.hidden = true;
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({ symptoms })
+        });
+
+        let data;
+        try {
+          data = await response.json();
+        } catch {
+          throw new Error(
+            `The health service returned an invalid response (HTTP ${response.status}).`
+          );
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data.error || `The health service returned HTTP ${response.status}.`
+          );
+        }
+
+        renderResults(data);
+
+        results.hidden = false;
+        status.textContent =
+          "Assessment received. Review the guidance carefully.";
+
+        setActiveNav("guidance");
+
+        results.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      } catch (error) {
+        status.textContent = "";
+        showErrorToast(
+          error instanceof Error && error.message
+            ? error.message
+            : "Unable to connect. Please try again."
+        );
+      } finally {
+        button.disabled = false;
+        buttonText.textContent = "Check my symptoms";
+      }
+    });
+
+    // SAFELY DISPLAY BACKEND JSON
+    function renderResults(data) {
+      if (!data || typeof data !== "object") {
+        throw new Error("The server returned an invalid response.");
+      }
+
+      const level = String(data.level || "").toLowerCase();
+
+      if (!Object.prototype.hasOwnProperty.call(levels, level)) {
+        throw new Error("The server returned an invalid urgency level.");
+      }
+
+      const config = levels[level];
+
+      triageCard.className = config.card;
+      triageLabel.className = config.label;
+      triageLabel.textContent = "Urgency assessment";
+      triageTitle.textContent = config.title;
+
+      triageSummary.textContent =
+        data.summary || "Please seek appropriate medical advice.";
+
+      triageDisclaimer.textContent =
+        data.disclaimer || "This is not a medical diagnosis.";
+
+      emergencyBanner.hidden = level !== "red";
+
+      if (level === "red") {
+        emergencyMessage.textContent =
+          data.emergency_message ||
+          "Seek emergency medical assistance immediately.";
+      }
+
+      firstAidList.replaceChildren();
+
+      const steps = Array.isArray(data.first_aid)
+        ? data.first_aid
+        : [];
+
+      if (steps.length === 0) {
+        const item = document.createElement("li");
+        item.textContent =
+          "Follow advice from a qualified healthcare professional.";
+        firstAidList.appendChild(item);
+      } else {
+        steps.forEach((step) => {
+          const item = document.createElement("li");
+          item.textContent = String(step);
+          firstAidList.appendChild(item);
+        });
+      }
+
+      facilityList.replaceChildren();
+
+      const facilities = Array.isArray(data.facilities)
+        ? data.facilities
+        : [];
+
+      if (facilities.length === 0) {
+        facilityList.textContent =
+          "No verified facility information is available.";
+      }
+
+      facilities.forEach((facility) => {
+        const item = document.createElement("div");
+        item.className = "py-4";
+
+        const name = document.createElement("h3");
+        name.className = "font-bold text-slate-800";
+        name.textContent = String(
+          facility.name || "Health facility"
+        );
+
+        const address = document.createElement("p");
+        address.className = "mt-1 text-sm leading-6 text-slate-600";
+        address.textContent = String(
+          facility.address || "Address unavailable"
+        );
+
+        item.append(name, address);
+
+        if (typeof facility.url === "string") {
+          try {
+            const url = new URL(facility.url);
+
+            if (url.protocol === "https:") {
+              const link = document.createElement("a");
+              link.href = url.href;
+              link.target = "_blank";
+              link.rel = "noopener noreferrer";
+              link.className =
+                "mt-2 inline-block min-h-11 py-2 font-semibold text-emerald-700 underline";
+              link.textContent = "View facility information";
+              item.appendChild(link);
+            }
+          } catch {
+            // Ignore malformed facility links.
+          }
+        }
+
+        facilityList.appendChild(item);
+      });
+    }
+
+    // PROFILE / PRIVACY REMINDER
+    const privacyButton = document.getElementById("privacy-button");
+    const privacyMessage = document.getElementById("privacy-message");
+
+    privacyButton.addEventListener("click", () => {
+      privacyMessage.hidden = !privacyMessage.hidden;
+
+      privacyButton.textContent = privacyMessage.hidden
+        ? "Privacy reminder"
+        : "Hide privacy reminder";
+    });
+  </script>
+
+</body>
+</html>
