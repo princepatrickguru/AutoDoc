@@ -1,4 +1,3 @@
-
 <?php
 
 // 1. JSON response and CORS headers
@@ -75,7 +74,7 @@ if (strlen($symptoms) > 10000) {
 
 // 4. Configure the Gemini API request
 $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
-    . 'gemini-1.5-flash:generateContent?key='
+    . 'gemini-3.8-flash:generateContent?key='
     . rawurlencode($apiKey);
 
 $systemInstruction = "You are an emergency medical triage assistant for AutoDoc Nigeria. "
@@ -112,7 +111,7 @@ $payload = [
     ],
     'generationConfig' => [
         'temperature' => 0.2,
-        'response_mime_type' => 'application/json'
+        'responseMimeType' => 'application/json'
     ]
 ];
 

@@ -417,13 +417,21 @@
           body: JSON.stringify({ symptoms })
         });
 
-        if (!response.ok) {
+        let data;
+        try {
+          data = await response.json();
+        } catch {
           throw new Error(
-            "The health service is unavailable. Please try again."
+            `The health service returned an invalid response (HTTP ${response.status}).`
           );
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(
+            data.error || `The health service returned HTTP ${response.status}.`
+          );
+        }
+
         renderResults(data);
 
         results.hidden = false;
