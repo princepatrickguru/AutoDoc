@@ -199,7 +199,10 @@
             </span>
             <div>
               <h2 class="text-lg font-bold sm:text-xl">Health facilities</h2>
-              <p class="text-sm text-slate-500">Facility information from the service</p>
+              <p id="facility-status" class="text-sm text-slate-500">
+                Location is shared with Google Places for nearby results;
+                denying access uses Ado-Ekiti.
+              </p>
             </div>
           </div>
 
@@ -299,6 +302,7 @@
     </nav>
   </footer>
 
+  <script src="assets/js/app.js"></script>
   <script>
     const API_URL = new URL("api/triage.php", window.location.href);
 
@@ -338,6 +342,7 @@
     const triageDisclaimer = document.getElementById("triage-disclaimer");
     const firstAidList = document.getElementById("first-aid-list");
     const facilityList = document.getElementById("facility-list");
+    const facilityStatus = document.getElementById("facility-status");
 
     const navItems = document.querySelectorAll(".nav-item");
 
@@ -438,13 +443,14 @@
       results.hidden = true;
 
       try {
+        const coordinates = await getUserCoordinates();
         const response = await fetch(API_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
           },
-          body: JSON.stringify({ symptoms })
+          body: JSON.stringify({ symptoms, ...coordinates })
         });
 
         let data;
@@ -542,13 +548,24 @@
 
       facilityList.replaceChildren();
 
-      const facilities = Array.isArray(data.facilities)
-        ? data.facilities
-        : [];
+      const facilities = Array.isArray(data.nearby_facilities)
+        ? data.nearby_facilities
+        : Array.isArray(data.facilities)
+          ? data.facilities
+          : [];
+
+      facilityStatus.textContent =
+        data.facility_source === "local_fallback"
+          ? "Local Ado-Ekiti suggestions — confirm details before travelling."
+          : data.facility_source === "google_places"
+            ? "Nearby results from Google Maps."
+            : "Nearby facility search is currently unavailable.";
 
       if (facilities.length === 0) {
         facilityList.textContent =
-          "No verified facility information is available.";
+          data.facility_source === "unavailable"
+            ? "No nearby facility information could be retrieved."
+            : "No nearby facilities were found.";
       }
 
       facilities.forEach((facility) => {
@@ -569,9 +586,24 @@
 
         item.append(name, address);
 
-        if (typeof facility.url === "string") {
+        if (facility.rating !== undefined) {
+          const rating = document.createElement("p");
+          rating.className = "mt-1 text-sm text-slate-600";
+          rating.textContent = `Rating: ${facility.rating}`;
+          item.appendChild(rating);
+        }
+
+        if (typeof facility.open_now === "string") {
+          const openingStatus = document.createElement("p");
+          openingStatus.className = "mt-1 text-sm text-slate-600";
+          openingStatus.textContent = facility.open_now;
+          item.appendChild(openingStatus);
+        }
+
+        const facilityUrl = facility.map_link || facility.url;
+        if (typeof facilityUrl === "string") {
           try {
-            const url = new URL(facility.url);
+            const url = new URL(facilityUrl);
 
             if (url.protocol === "https:") {
               const link = document.createElement("a");
