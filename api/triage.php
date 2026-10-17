@@ -1,4 +1,3 @@
-
 <?php
 
 // 1. JSON response and CORS headers
@@ -37,6 +36,8 @@ if (!file_exists($autoloadPath)) {
 }
 
 require_once $autoloadPath;
+define('AUTODOC_BOOTSTRAPPED', true);
+require_once $projectRoot . '/api/location.php';
 
 try {
     $dotenv = Dotenv\Dotenv::createImmutable($projectRoot);
@@ -73,9 +74,35 @@ if (strlen($symptoms) > 10000) {
     sendError('Symptom details are too long.');
 }
 
+$hasLatitude = array_key_exists('lat', $inputData);
+$hasLongitude = array_key_exists('lng', $inputData);
+
+if ($hasLatitude !== $hasLongitude) {
+    sendError('Both latitude and longitude must be provided together.');
+}
+
+$latitude = $hasLatitude ? $inputData['lat'] : 7.6498;
+$longitude = $hasLongitude ? $inputData['lng'] : 5.2214;
+
+if (
+    !is_numeric($latitude) ||
+    !is_numeric($longitude) ||
+    !is_finite((float) $latitude) ||
+    !is_finite((float) $longitude) ||
+    (float) $latitude < -90 ||
+    (float) $latitude > 90 ||
+    (float) $longitude < -180 ||
+    (float) $longitude > 180
+) {
+    sendError('The provided location is invalid.');
+}
+
+$latitude = (float) $latitude;
+$longitude = (float) $longitude;
+
 // 4. Configure the Gemini API request
 $url = 'https://generativelanguage.googleapis.com/v1beta/models/'
-    . 'gemini-1.5-flash:generateContent?key='
+    . 'gemini-3.8-flash:generateContent?key='
     . rawurlencode($apiKey);
 
 $systemInstruction = "You are an emergency medical triage assistant for AutoDoc Nigeria. "
@@ -112,7 +139,7 @@ $payload = [
     ],
     'generationConfig' => [
         'temperature' => 0.2,
-        'response_mime_type' => 'application/json'
+        'responseMimeType' => 'application/json'
     ]
 ];
 
@@ -138,12 +165,18 @@ curl_setopt_array($ch, [
 
 $response = curl_exec($ch);
 $curlError = curl_errno($ch);
+$curlErrorMessage = curl_error($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 curl_close($ch);
 
 // 6. Handle connection and API errors
 if ($response === false || $curlError !== 0) {
+    error_log(
+        'Gemini API cURL error (' . $curlError . '): '
+        . ($curlErrorMessage !== '' ? $curlErrorMessage : 'No error message.')
+    );
+
     sendError('Unable to connect to the AI triage service.', 502);
 }
 
@@ -189,6 +222,14 @@ if (
     sendError('The AI returned an invalid triage result.', 502);
 }
 
-// 8. Return valid JSON to the frontend
+$facilityResults = getNearbyHealthFacilities(
+    $latitude,
+    $longitude,
+    $apiKey
+);
+$triageData['nearby_facilities'] = $facilityResults['facilities'];
+$triageData['facility_source'] = $facilityResults['source'];
+
+// 9. Return valid JSON to the frontend
 http_response_code(200);
 echo json_encode($triageData);

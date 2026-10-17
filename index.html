@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +12,16 @@
 </head>
 
 <body class="min-h-screen bg-slate-50 pb-24 text-slate-800 md:pb-0">
+
+  <div id="error-toast" role="alert" aria-live="assertive" aria-atomic="true"
+    class="fixed inset-x-4 top-4 z-50 mx-auto flex max-w-lg items-start justify-between gap-4 rounded-xl border border-red-200 bg-white p-4 text-sm font-medium text-red-900 shadow-xl"
+    hidden>
+    <p id="error-toast-message"></p>
+    <button id="dismiss-error-toast" type="button" aria-label="Dismiss error"
+      class="shrink-0 rounded p-1 text-lg leading-none text-red-700 hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
+      &times;
+    </button>
+  </div>
 
   <!-- APP HEADER -->
   <header id="home" class="bg-emerald-700 text-white">
@@ -190,7 +199,10 @@
             </span>
             <div>
               <h2 class="text-lg font-bold sm:text-xl">Health facilities</h2>
-              <p class="text-sm text-slate-500">Facility information from the service</p>
+              <p id="facility-status" class="text-sm text-slate-500">
+                Location is shared with Google Places for nearby results;
+                denying access uses Ado-Ekiti.
+              </p>
             </div>
           </div>
 
@@ -290,16 +302,36 @@
     </nav>
   </footer>
 
+  <script src="assets/js/app.js"></script>
   <script>
-    // Replace this with your team's actual PHP endpoint.
-    const API_URL = "/api/triage.php";
+    const API_URL = new URL("api/triage.php", window.location.href);
 
     const form = document.getElementById("symptom-form");
     const input = document.getElementById("symptoms");
     const button = document.getElementById("submit-btn");
     const buttonText = document.getElementById("button-text");
     const status = document.getElementById("status");
+    const errorToast = document.getElementById("error-toast");
+    const errorToastMessage = document.getElementById("error-toast-message");
+    const dismissErrorToast = document.getElementById("dismiss-error-toast");
     const results = document.getElementById("results");
+    let errorToastTimeout;
+
+    function hideErrorToast() {
+      window.clearTimeout(errorToastTimeout);
+      errorToast.hidden = true;
+    }
+
+    function showErrorToast(message) {
+      window.clearTimeout(errorToastTimeout);
+      errorToastMessage.textContent = message;
+      errorToast.hidden = false;
+      errorToastTimeout = window.setTimeout(() => {
+        errorToast.hidden = true;
+      }, 7000);
+    }
+
+    dismissErrorToast.addEventListener("click", hideErrorToast);
 
     const emergencyBanner = document.getElementById("emergency-banner");
     const emergencyMessage = document.getElementById("emergency-message");
@@ -310,6 +342,7 @@
     const triageDisclaimer = document.getElementById("triage-disclaimer");
     const firstAidList = document.getElementById("first-aid-list");
     const facilityList = document.getElementById("facility-list");
+    const facilityStatus = document.getElementById("facility-status");
 
     const navItems = document.querySelectorAll(".nav-item");
 
@@ -398,33 +431,43 @@
       const symptoms = input.value.trim();
 
       if (!symptoms) {
-        status.textContent = "Please describe your symptoms first.";
+        showErrorToast("Please describe your symptoms first.");
         input.focus();
         return;
       }
 
+      hideErrorToast();
       button.disabled = true;
       buttonText.textContent = "Checking...";
       status.textContent = "Contacting the health service...";
       results.hidden = true;
 
       try {
+        const coordinates = await getUserCoordinates();
         const response = await fetch(API_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "Accept": "application/json"
           },
-          body: JSON.stringify({ symptoms })
+          body: JSON.stringify({ symptoms, ...coordinates })
         });
 
-        if (!response.ok) {
+        let data;
+        try {
+          data = await response.json();
+        } catch {
           throw new Error(
-            "The health service is unavailable. Please try again."
+            `The health service returned an invalid response (HTTP ${response.status}).`
           );
         }
 
-        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(
+            data.error || `The health service returned HTTP ${response.status}.`
+          );
+        }
+
         renderResults(data);
 
         results.hidden = false;
@@ -439,8 +482,12 @@
         });
 
       } catch (error) {
-        status.textContent =
-          error.message || "Unable to connect. Please try again.";
+        status.textContent = "";
+        showErrorToast(
+          error instanceof Error && error.message
+            ? error.message
+            : "Unable to connect. Please try again."
+        );
       } finally {
         button.disabled = false;
         buttonText.textContent = "Check my symptoms";
@@ -501,13 +548,24 @@
 
       facilityList.replaceChildren();
 
-      const facilities = Array.isArray(data.facilities)
-        ? data.facilities
-        : [];
+      const facilities = Array.isArray(data.nearby_facilities)
+        ? data.nearby_facilities
+        : Array.isArray(data.facilities)
+          ? data.facilities
+          : [];
+
+      facilityStatus.textContent =
+        data.facility_source === "local_fallback"
+          ? "Local Ado-Ekiti suggestions — confirm details before travelling."
+          : data.facility_source === "google_places"
+            ? "Nearby results from Google Maps."
+            : "Nearby facility search is currently unavailable.";
 
       if (facilities.length === 0) {
         facilityList.textContent =
-          "No verified facility information is available.";
+          data.facility_source === "unavailable"
+            ? "No nearby facility information could be retrieved."
+            : "No nearby facilities were found.";
       }
 
       facilities.forEach((facility) => {
@@ -528,9 +586,24 @@
 
         item.append(name, address);
 
-        if (typeof facility.url === "string") {
+        if (facility.rating !== undefined) {
+          const rating = document.createElement("p");
+          rating.className = "mt-1 text-sm text-slate-600";
+          rating.textContent = `Rating: ${facility.rating}`;
+          item.appendChild(rating);
+        }
+
+        if (typeof facility.open_now === "string") {
+          const openingStatus = document.createElement("p");
+          openingStatus.className = "mt-1 text-sm text-slate-600";
+          openingStatus.textContent = facility.open_now;
+          item.appendChild(openingStatus);
+        }
+
+        const facilityUrl = facility.map_link || facility.url;
+        if (typeof facilityUrl === "string") {
           try {
-            const url = new URL(facility.url);
+            const url = new URL(facilityUrl);
 
             if (url.protocol === "https:") {
               const link = document.createElement("a");
