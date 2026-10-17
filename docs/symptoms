@@ -1,0 +1,18 @@
+| Test ID | Scenario | Expected Result | Observed Status | Notes |
+|---|---|---|---|---|
+| T01 | Fever / suspected malaria | Yellow | Not tested | Symptoms alone cannot confirm malaria. |
+| T02 | Vomiting / diarrhoea | Yellow* | Not tested | Check for dehydration and emergency warning signs. |
+| T03 | Severe allergic reaction | Red | Not tested | Immediate emergency assistance required. |
+| T04 | Fever with confusion | Red | Not tested | Immediate emergency assessment required. |
+| T05 | Chest pain with possible emergency signs | Red | Not tested | Seek immediate emergency assistance. |
+| T06 | Mild headache | Green* | Not tested | Only if approved rules find no warning signs. |
+
+## Testing notes
+
+- These are proposed expected results, not clinically validated rules.
+- "Not tested" means the app has not yet been tested with that scenario.
+- Record the actual output and any incorrect or unsafe guidance after testing.
+- Any emergency scenario incorrectly classified as Green or Yellow must be flagged as a critical safety failure.
+- Have a qualified health professional review the scenarios and expected results before real-world use.
+
+*The expected level depends on the complete symptoms and approved triage rul
