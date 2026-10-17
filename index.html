@@ -13,6 +13,16 @@
 
 <body class="min-h-screen bg-slate-50 pb-24 text-slate-800 md:pb-0">
 
+  <div id="error-toast" role="alert" aria-live="assertive" aria-atomic="true"
+    class="fixed inset-x-4 top-4 z-50 mx-auto flex max-w-lg items-start justify-between gap-4 rounded-xl border border-red-200 bg-white p-4 text-sm font-medium text-red-900 shadow-xl"
+    hidden>
+    <p id="error-toast-message"></p>
+    <button id="dismiss-error-toast" type="button" aria-label="Dismiss error"
+      class="shrink-0 rounded p-1 text-lg leading-none text-red-700 hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
+      &times;
+    </button>
+  </div>
+
   <!-- APP HEADER -->
   <header id="home" class="bg-emerald-700 text-white">
     <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
@@ -290,15 +300,34 @@
   </footer>
 
   <script>
-    // Replace this with your team's actual PHP endpoint.
-    const API_URL = "/api/triage.php";
+    const API_URL = new URL("api/triage.php", window.location.href);
 
     const form = document.getElementById("symptom-form");
     const input = document.getElementById("symptoms");
     const button = document.getElementById("submit-btn");
     const buttonText = document.getElementById("button-text");
     const status = document.getElementById("status");
+    const errorToast = document.getElementById("error-toast");
+    const errorToastMessage = document.getElementById("error-toast-message");
+    const dismissErrorToast = document.getElementById("dismiss-error-toast");
     const results = document.getElementById("results");
+    let errorToastTimeout;
+
+    function hideErrorToast() {
+      window.clearTimeout(errorToastTimeout);
+      errorToast.hidden = true;
+    }
+
+    function showErrorToast(message) {
+      window.clearTimeout(errorToastTimeout);
+      errorToastMessage.textContent = message;
+      errorToast.hidden = false;
+      errorToastTimeout = window.setTimeout(() => {
+        errorToast.hidden = true;
+      }, 7000);
+    }
+
+    dismissErrorToast.addEventListener("click", hideErrorToast);
 
     const emergencyBanner = document.getElementById("emergency-banner");
     const emergencyMessage = document.getElementById("emergency-message");
@@ -397,11 +426,12 @@
       const symptoms = input.value.trim();
 
       if (!symptoms) {
-        status.textContent = "Please describe your symptoms first.";
+        showErrorToast("Please describe your symptoms first.");
         input.focus();
         return;
       }
 
+      hideErrorToast();
       button.disabled = true;
       buttonText.textContent = "Checking...";
       status.textContent = "Contacting the health service...";
@@ -446,8 +476,12 @@
         });
 
       } catch (error) {
-        status.textContent =
-          error.message || "Unable to connect. Please try again.";
+        status.textContent = "";
+        showErrorToast(
+          error instanceof Error && error.message
+            ? error.message
+            : "Unable to connect. Please try again."
+        );
       } finally {
         button.disabled = false;
         buttonText.textContent = "Check my symptoms";

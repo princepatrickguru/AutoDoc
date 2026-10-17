@@ -137,12 +137,18 @@ curl_setopt_array($ch, [
 
 $response = curl_exec($ch);
 $curlError = curl_errno($ch);
+$curlErrorMessage = curl_error($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 curl_close($ch);
 
 // 6. Handle connection and API errors
 if ($response === false || $curlError !== 0) {
+    error_log(
+        'Gemini API cURL error (' . $curlError . '): '
+        . ($curlErrorMessage !== '' ? $curlErrorMessage : 'No error message.')
+    );
+
     sendError('Unable to connect to the AI triage service.', 502);
 }
 

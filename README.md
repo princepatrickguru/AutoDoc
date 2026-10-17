@@ -8,9 +8,16 @@ Requirements: PHP with cURL enabled, Composer, and a Gemini API key.
 1. Install dependencies with `composer install`.
 2. Copy `.env.example` to `.env` and set `GCP_API_KEY` to your Gemini API key.
 3. Start PHP's built-in server from the project root with `php -S localhost:8000`.
-4. Open `http://localhost:8000` in your browser. Do not open `index.html` directly or use a static preview server; the page needs the PHP endpoint at `/api/triage.php`.
+4. Open `http://localhost:8000` in your browser. Do not open `index.html`
+   directly or use a static preview server; the page needs the PHP endpoint
+   at `api/triage.php` relative to the app URL.
 
-Keep `.env` private and never commit your API key. If the page displays a service error, confirm PHP/cURL are enabled, the server is running, and `.env` contains a valid key.
+Keep `.env` private and never commit your API key. If the page displays
+“Unable to connect to the AI triage service,” check the PHP/Apache error log
+(or the PHP server terminal) for a `Gemini API cURL error` entry. It contains
+the transport error needed to distinguish a timeout, DNS, or TLS problem; do
+not share your API key when reporting it. Also confirm the server can make
+outbound HTTPS connections to Google's API.
 
 ## Features
 - Symptom text input in English or Nigerian Pidgin
