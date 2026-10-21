@@ -1,642 +1,950 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#087f5b">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#047857" />
+  <meta name="description" content="AutoDoc Nigeria helps you understand your symptoms, keep track of your health history, and find your next step." />
 
-  <title>AutoDoc Nigeria | Team TriTech</title>
+  <title>AutoDoc Nigeria | Your Health, Made Clearer</title>
 
-  <!-- Tailwind CSS browser CDN: prototype only -->
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet" />
+
+  <style>
+
+    
+/* Initial application loader */
+.app-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #f8fffc;
+    opacity: 1;
+    visibility: visible;
+    transition:
+        opacity 0.45s ease,
+        visibility 0.45s ease;
+}
+
+.app-loader.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-content {
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    animation: loader-appear 0.65s ease both;
+}
+
+.loader-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 20px;
+    color: #ffffff;
+    background: linear-gradient(145deg, #10b981, #047857);
+    border-radius: 25px;
+    box-shadow: 0 12px 30px rgba(5, 150, 105, 0.22);
+    animation: loader-pulse 1.6s ease-in-out infinite;
+}
+
+.loader-logo .material-symbols-outlined {
+    font-size: 42px;
+}
+
+.loader-content h1 {
+    margin: 0;
+    color: #12372e;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1.2px;
+}
+
+.loader-content h1 span {
+    color: #059669;
+}
+
+.loader-content p {
+    margin: 8px 0 30px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.loader-track {
+    width: 100%;
+    height: 5px;
+    overflow: hidden;
+    background: #dcefe7;
+    border-radius: 999px;
+}
+
+.loader-progress {
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #047857);
+    border-radius: inherit;
+    animation: loader-progress 1.8s ease-in-out forwards;
+}
+
+.loader-caption {
+    display: block;
+    margin-top: 14px;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+@keyframes loader-appear {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes loader-pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 12px 30px rgba(5, 150, 105, 0.18);
+    }
+    50% {
+        transform: scale(1.045);
+        box-shadow: 0 16px 36px rgba(5, 150, 105, 0.28);
+    }
+}
+
+@keyframes loader-progress {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .loader-content,
+    .loader-logo,
+    .loader-progress {
+        animation: none;
+    }
+
+    .app-loader {
+        transition: none;
+    }
+}
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", sans-serif;
+      background: #f7fbf9;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    .page-glow {
+      background:
+        radial-gradient(ellipse at 10% 5%, rgba(167, 243, 208, .38), transparent 35%),
+        radial-gradient(ellipse at 95% 85%, rgba(153, 246, 228, .32), transparent 34%),
+        linear-gradient(145deg, #f8fdf9 0%, #f0fdfa 48%, #f8fafc 100%);
+    }
+
+    .hero-orb {
+      background: linear-gradient(145deg, #10b981, #047857 58%, #115e59);
+      box-shadow:
+        0 28px 70px rgba(4, 120, 87, .22),
+        inset 0 1px 0 rgba(255,255,255,.25);
+    }
+
+    .float-animation {
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .enter-animation {
+      animation: enter .7s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .enter-delay-1 { animation-delay: .08s; }
+    .enter-delay-2 { animation-delay: .16s; }
+    .enter-delay-3 { animation-delay: .24s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #registration-overlay {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .25s ease, visibility .25s ease;
+    }
+
+    #registration-overlay.sheet-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    #registration-panel {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: transform .3s cubic-bezier(.2,.8,.2,1), opacity .25s ease;
+    }
+
+    #registration-overlay.sheet-open #registration-panel {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Polished registration bottom sheet */
+    #registration-overlay {
+      padding-top: max(1rem, env(safe-area-inset-top));
+    }
+
+    #registration-panel {
+      max-height: min(92svh, 780px);
+      border: 1px solid rgba(255, 255, 255, .85);
+      box-shadow: 0 30px 90px rgba(2, 44, 34, .24);
+      overscroll-behavior: contain;
+    }
+
+    .registration-sheet-top {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(167, 243, 208, .26), transparent 38%),
+        linear-gradient(135deg, #064e3b 0%, #047857 55%, #0f766e 100%);
+      color: white;
+    }
+
+    .registration-sheet-top::after {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      right: -62px;
+      top: -86px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 50%;
+      box-shadow: 0 0 0 22px rgba(255,255,255,.035), 0 0 0 44px rgba(255,255,255,.025);
+      pointer-events: none;
+    }
+
+    .registration-brand-icon {
+      display: flex;
+      width: 48px;
+      height: 48px;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 16px;
+      background: rgba(255,255,255,.13);
+      color: white;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.14);
+    }
+
+    .registration-field input {
+      min-height: 54px;
+      border-color: #dbe5e1;
+      background: #f8fbf9;
+      transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+
+    .registration-field input:focus {
+      border-color: #059669;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, .12);
+    }
+
+    #registration-submit {
+      min-height: 56px;
+      background: linear-gradient(135deg, #059669, #047857);
+      box-shadow: 0 12px 24px rgba(4, 120, 87, .18);
+    }
+
+    #registration-submit:not(:disabled):hover {
+      background: linear-gradient(135deg, #047857, #065f46);
+      transform: translateY(-1px);
+    }
+
+    @media (min-width: 768px) {
+      #registration-panel {
+        max-height: min(88svh, 780px);
+        border-radius: 28px;
+      }
+    }
+
+    @media (max-width: 767px) {
+      #registration-panel {
+        padding-bottom: env(safe-area-inset-bottom);
+        border-radius: 28px 28px 0 0;
+      }
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+
+    .safe-bottom {
+      padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+    }
+
+    @media (min-width: 768px) {
+      #registration-panel {
+        transform: translateY(12px) scale(.98);
+      }
+
+      #registration-overlay.sheet-open #registration-panel {
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
 
-<body class="min-h-screen bg-slate-50 pb-24 text-slate-800 md:pb-0">
+<body class="min-h-screen text-slate-800 antialiased">
+  <!-- Initial Splash Loader -->
+<div id="app-loader" class="app-loader" role="status" aria-live="polite">
+    <div class="loader-content">
+        <div class="loader-logo">
+            <span class="material-symbols-outlined">health_and_safety</span>
+        </div>
 
-  <div id="error-toast" role="alert" aria-live="assertive" aria-atomic="true"
-    class="fixed inset-x-4 top-4 z-50 mx-auto flex max-w-lg items-start justify-between gap-4 rounded-xl border border-red-200 bg-white p-4 text-sm font-medium text-red-900 shadow-xl"
-    hidden>
-    <p id="error-toast-message"></p>
-    <button id="dismiss-error-toast" type="button" aria-label="Dismiss error"
-      class="shrink-0 rounded p-1 text-lg leading-none text-red-700 hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700">
-      &times;
-    </button>
-  </div>
+        <h1>Auto<span>Doc</span></h1>
+        <p>Your health, made clearer.</p>
 
-  <!-- APP HEADER -->
-  <header id="home" class="bg-emerald-700 text-white">
-    <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
-      <a href="#home" class="flex min-w-0 items-center gap-3">
-        <span class="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl text-emerald-700">
-          ✚
-        </span>
-        <span class="min-w-0">
-          <span class="block text-lg font-extrabold tracking-tight sm:text-xl">
-            AutoDoc Nigeria
-          </span>
-          <span class="block text-xs text-emerald-100">
-            Your health companion
-          </span>
-        </span>
+        <div class="loader-track">
+            <div class="loader-progress"></div>
+        </div>
+
+        <span class="loader-caption">Preparing your experience...</span>
+    </div>
+</div>
+
+
+
+  <!-- Splash / Welcome page -->
+  <main class="page-glow relative flex min-h-[100svh] flex-col overflow-hidden">
+
+    <!-- Subtle background decorations -->
+    <div class="pointer-events-none absolute -left-28 top-36 h-64 w-64 rounded-full border border-emerald-200/50"></div>
+    <div class="pointer-events-none absolute -left-16 top-48 h-40 w-40 rounded-full border border-emerald-200/40"></div>
+    <div class="pointer-events-none absolute -right-24 top-20 h-72 w-72 rounded-full bg-teal-100/50 blur-3xl"></div>
+
+    <!-- Brand header -->
+    <header class="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 sm:py-7">
+      <a href="index.html" class="flex items-center gap-3" aria-label="AutoDoc Nigeria home">
+        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-700 text-white shadow-lg shadow-emerald-900/15">
+          <span class="text-2xl font-extrabold">A</span>
+        </div>
+
+        <div>
+          <p class="text-lg font-extrabold tracking-tight text-slate-900">AutoDoc</p>
+          <p class="-mt-0.5 text-[10px] font-bold uppercase tracking-[.24em] text-emerald-700">Nigeria</p>
+        </div>
       </a>
 
-      <span class="hidden rounded-full bg-emerald-600 px-3 py-2 text-xs font-semibold sm:inline-flex">
-        Team TriTech
-      </span>
-    </nav>
-  </header>
+      <div class="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-white/80 px-3 py-2 shadow-sm">
+        <span class="material-symbols-outlined text-lg text-emerald-700">verified_user</span>
+        <span class="text-xs font-bold text-slate-700">Health guidance</span>
+      </div>
+    </header>
 
-  <main class="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
+    <!-- Main hero -->
+    <section class="relative z-10 mx-auto grid w-full max-w-7xl flex-1 items-center gap-10 px-5 pb-10 pt-5 sm:px-8 md:grid-cols-2 md:gap-14 md:py-12 lg:gap-20">
 
-    <!-- HOME / HERO -->
-    <section class="mb-7 sm:mb-9">
-      <p class="text-sm font-bold text-emerald-700">
-        HEALTH GUIDANCE MADE ACCESSIBLE
-      </p>
+      <!-- Hero copy -->
+      <div class="order-2 max-w-2xl md:order-1">
+        
+        <h1 class="enter-animation enter-delay-1 mt-6 max-w-xl text-[2.65rem] font-extrabold leading-[1.08] tracking-[-.055em] text-slate-950 sm:text-5xl lg:text-6xl">
+          Your health,
+          <span class="relative inline-block text-emerald-700">
+            made clearer.
+            <svg class="absolute -bottom-2 left-0 w-full text-emerald-300" viewBox="0 0 300 12" fill="none" aria-hidden="true">
+              <path d="M3 8C75 2 191 2 297 7" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </h1>
 
-      <h1 class="mt-3 max-w-2xl text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-        How are you feeling today?
-      </h1>
+        <p class="enter-animation enter-delay-2 mt-6 max-w-lg text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
+          Understand your symptoms, keep track of your health history, and discover practical next steps with AutoDoc Nigeria.
+        </p>
 
-      <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">
-        Describe your symptoms in English or Nigerian Pidgin.
-        Get guidance on the next steps and find healthcare facilities.
-      </p>
-    </section>
+        <!-- Conditional CTA -->
+        <div class="enter-animation enter-delay-3 mt-8">
+          <button id="welcome-cta" type="button"
+            class="group flex min-h-14 w-full items-center justify-center gap-3 rounded-2xl bg-emerald-700 px-6 py-4 text-base font-extrabold text-white shadow-xl shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-2xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200 sm:w-auto sm:min-w-[245px]">
+            <span id="welcome-cta-label">Let's Know You</span>
+            <span id="welcome-cta-icon" class="material-symbols-outlined text-xl transition-transform group-hover:translate-x-1">arrow_forward</span>
+          </button>
 
-    <!-- SYMPTOM FORM -->
-    <section id="symptom-section"
-      class="scroll-mt-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-7">
-
-      <div class="flex items-start gap-3">
-        <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-xl">
-          🩺
-        </span>
-        <div>
-          <h2 class="text-lg font-bold sm:text-xl">Check your symptoms</h2>
-          <p class="mt-1 text-sm text-slate-500">
-            Tell us what you are experiencing.
+          <p id="welcome-cta-hint" class="mt-3 flex items-center justify-center gap-2 text-xs text-slate-500 sm:justify-start">
+            <span class="material-symbols-outlined text-base text-emerald-700">lock</span>
+            A quick setup to keep your health records connected.
           </p>
         </div>
-      </div>
 
-      <form id="symptom-form" class="mt-5">
-        <label for="symptoms" class="mb-2 block text-sm font-semibold">
-          Describe your symptoms
-        </label>
-
-        <textarea
-          id="symptoms"
-          name="symptoms"
-          required
-          maxlength="2000"
-          class="min-h-36 w-full rounded-xl border border-slate-300 bg-white p-4 text-base leading-6 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100"
-          placeholder="Example: My head dey pain me and I dey feel dizzy..."
-        ></textarea>
-
-        <p class="mt-2 text-xs leading-5 text-slate-500">
-          Include when the symptoms started and how severe they are.
-          Avoid entering your name or personal identification details.
-        </p>
-
-        <button
-          id="submit-btn"
-          type="submit"
-          class="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-5 py-3 font-bold text-white transition hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 active:scale-[0.99] disabled:cursor-wait disabled:opacity-60 sm:w-auto sm:min-w-52"
-        >
-          <span id="button-text">Check my symptoms</span>
-          <span aria-hidden="true">→</span>
-        </button>
-      </form>
-
-      <!-- MEDICAL SAFETY NOTICE -->
-      <div class="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
-        <div class="flex items-start gap-3">
-          <span aria-hidden="true" class="text-xl">⚠️</span>
+        <!-- Trust points
+        <div class="mt-9 grid max-w-lg grid-cols-3 gap-3 border-t border-slate-200/80 pt-6">
           <div>
-            <h3 class="font-bold text-amber-950">Important health notice</h3>
-            <p class="mt-1 text-sm leading-6 text-amber-900">
-              This tool does not diagnose medical conditions. If you have
-              severe difficulty breathing, become unconscious, or experience
-              another life-threatening emergency, seek emergency medical help
-              immediately. Do not wait for an online assessment.
-            </p>
+            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
+              <span class="material-symbols-outlined text-xl">ecg_heart</span>
+            </div>
+            <p class="mt-3 text-xs font-bold text-slate-800 sm:text-sm">Symptom guidance</p>
+            <p class="mt-1 text-[11px] leading-4 text-slate-500 sm:text-xs">Know possible next steps</p>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- LIVE STATUS -->
-    <p id="status" role="status" aria-live="polite"
-      class="mt-4 text-sm leading-6 text-slate-600"></p>
-
-    <!-- RESULTS -->
-    <section id="results" class="mt-6 space-y-5 sm:mt-8 sm:space-y-6" hidden>
-
-      <!-- EMERGENCY BANNER -->
-      <div id="emergency-banner" role="alert"
-        class="scroll-mt-5 rounded-2xl border-2 border-red-600 bg-red-50 p-5 sm:p-6"
-        hidden>
-        <div class="flex items-start gap-3">
-          <span class="text-2xl" aria-hidden="true">🚨</span>
           <div>
-            <h2 class="text-xl font-extrabold text-red-800">
-              Emergency — Act now
-            </h2>
-            <p id="emergency-message" class="mt-2 leading-7 text-red-900"></p>
-            <p class="mt-3 text-sm font-semibold text-red-800">
-              Do not delay emergency care while using this application.
-            </p>
+            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-100 text-teal-800">
+              <span class="material-symbols-outlined text-xl">history</span>
+            </div>
+            <p class="mt-3 text-xs font-bold text-slate-800 sm:text-sm">Health history</p>
+            <p class="mt-1 text-[11px] leading-4 text-slate-500 sm:text-xs">Review past checks</p>
           </div>
-        </div>
+
+          <div>
+            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-100 text-sky-800">
+              <span class="material-symbols-outlined text-xl">location_on</span>
+            </div>
+            <p class="mt-3 text-xs font-bold text-slate-800 sm:text-sm">Find care</p>
+            <p class="mt-1 text-[11px] leading-4 text-slate-500 sm:text-xs">Explore care options</p>
+          </div>
+        </div> -->
       </div>
 
-      <!-- TRIAGE RESULT -->
-      <article id="triage-card"
-        class="scroll-mt-5 rounded-2xl border border-emerald-200 border-l-4 border-l-emerald-600 bg-emerald-50 p-5 sm:p-6">
+      <!-- Visual hero -->
+      <div class="order-1 flex items-center justify-center md:order-2">
+        <div class="relative w-full max-w-[420px]">
 
-        <p id="triage-label"
-          class="text-xs font-bold uppercase tracking-widest text-emerald-800">
-          Urgency assessment
-        </p>
+          <!-- Decorative rings -->
+          <div class="absolute inset-2 rounded-[3rem] border border-emerald-200/70 rotate-6"></div>
+          <div class="absolute inset-5 rounded-[3rem] border border-teal-200/70 -rotate-3"></div>
 
-        <h2 id="triage-title" class="mt-2 text-2xl font-extrabold"></h2>
+          <!-- Main illustration card -->
+          <div class="hero-orb float-animation relative mx-auto aspect-[.92] w-[88%] overflow-hidden rounded-[2.7rem] p-5 sm:p-7">
 
-        <p id="triage-summary" class="mt-3 leading-7"></p>
+            <div class="absolute -right-10 -top-10 h-44 w-44 rounded-full border-[25px] border-white/[.08]"></div>
+            <div class="absolute -bottom-12 -left-8 h-48 w-48 rounded-full bg-teal-300/15 blur-2xl"></div>
 
-        <p id="triage-disclaimer"
-          class="mt-3 text-sm leading-6 text-slate-600"></p>
-      </article>
+            <div class="relative flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold text-emerald-100">WELCOME TO</p>
+                <p class="mt-1 text-lg font-extrabold text-white">AutoDoc Nigeria</p>
+              </div>
+              <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-white/20 bg-white/10">
+                <span class="material-symbols-outlined text-2xl text-white">health_and_safety</span>
+              </div>
+            </div>
 
-      <!-- GUIDANCE AND FACILITIES -->
-      <div class="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
+            <!-- Medical cross illustration -->
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="relative mt-3 flex h-40 w-40 items-center justify-center rounded-[2.8rem] border border-white/20 bg-white/10 shadow-2xl backdrop-blur-sm sm:h-48 sm:w-48">
+                <div class="absolute inset-3 rounded-[2.2rem] border border-white/10"></div>
+                <div class="flex h-24 w-24 items-center justify-center rounded-[2rem] bg-white shadow-xl shadow-emerald-950/20 sm:h-28 sm:w-28">
+                  <span class="material-symbols-outlined text-[4.5rem] text-emerald-700 sm:text-[5rem]">health_and_safety</span>
+                </div>
 
-        <!-- GUIDANCE -->
-        <article id="guidance"
-          class="scroll-mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                <div class="absolute -right-6 top-5 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-white/15 shadow-lg backdrop-blur-md">
+                  <span class="material-symbols-outlined text-2xl text-white">favorite</span>
+                </div>
 
-          <div class="flex items-center gap-3">
-            <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-xl">
-              🩹
-            </span>
-            <div>
-              <h2 class="text-lg font-bold sm:text-xl">First-aid guidance</h2>
-              <p class="text-sm text-slate-500">Recommended next steps</p>
+                <div class="absolute -bottom-4 -left-6 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-white/15 shadow-lg backdrop-blur-md">
+                  <span class="material-symbols-outlined text-2xl text-white">monitor_heart</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-md sm:bottom-7 sm:left-7 sm:right-7">
+              <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15">
+                  <span class="material-symbols-outlined text-xl text-white">chat</span>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-white">Start with how you feel</p>
+                  <p class="mt-1 text-xs leading-5 text-emerald-50">Clearer information. More informed next steps.</p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <ol id="first-aid-list"
-            class="mt-5 list-decimal space-y-3 pl-5 leading-7"></ol>
-        </article>
-
-        <!-- FACILITIES -->
-        <article id="facilities"
-          class="scroll-mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-
-          <div class="flex items-center gap-3">
-            <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-xl">
-              🏥
-            </span>
+          <!-- Floating free-check note -->
+          <div class="absolute -left-1 top-[22%] flex items-center gap-2.5 rounded-2xl border border-emerald-100 bg-white p-3 shadow-xl shadow-emerald-950/10 sm:-left-3 sm:p-3.5">
+            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
+              <span class="material-symbols-outlined text-xl">check_circle</span>
+            </div>
             <div>
-              <h2 class="text-lg font-bold sm:text-xl">Health facilities</h2>
-              <p id="facility-status" class="text-sm text-slate-500">
-                Location is shared with Google Places for nearby results;
-                denying access uses Ado-Ekiti.
+              <p class="text-xs font-extrabold text-slate-900">First check</p>
+              <p class="text-[11px] font-bold text-emerald-700">Free</p>
+            </div>
+          </div>
+
+          <!-- Floating privacy note -->
+          <div class="absolute -right-1 bottom-[25%] flex items-center gap-2 rounded-2xl border border-slate-100 bg-white px-3 py-2.5 shadow-xl shadow-emerald-950/10 sm:-right-3">
+            <span class="material-symbols-outlined text-xl text-emerald-700">verified_user</span>
+            <span class="text-xs font-bold text-slate-700">Your records, connected</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+  </main>
+
+
+  <!-- Registration sheet / modal -->
+  <div id="registration-overlay"
+    class="fixed inset-0 z-[100] flex items-end justify-center bg-slate-950/55 px-0 backdrop-blur-sm md:items-center md:px-4"
+    aria-hidden="true">
+
+    <!-- Backdrop -->
+    <button type="button" id="registration-backdrop"
+      class="absolute inset-0 cursor-default"
+      tabindex="-1"
+      aria-label="Close registration"></button>
+
+    <!-- Sheet panel -->
+    <section id="registration-panel"
+      class="relative z-10 flex max-h-[94svh] w-full flex-col overflow-hidden rounded-t-[2rem] border border-white/70 bg-white shadow-2xl md:max-w-lg md:rounded-[2rem]"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="registration-title"
+      tabindex="-1">
+
+      <!-- Mobile drag handle -->
+      <div class="flex justify-center pt-3 md:hidden" aria-hidden="true">
+        <div class="h-1.5 w-12 rounded-full bg-slate-200"></div>
+      </div>
+
+      <!-- Premium sheet header -->
+      <div class="registration-sheet-top px-5 pb-6 pt-4 sm:px-7 sm:pb-7 sm:pt-7">
+        <div class="relative z-10 flex items-start justify-between gap-4">
+          <div class="flex min-w-0 items-start gap-3.5">
+            <div class="registration-brand-icon">
+              <span class="material-symbols-outlined text-2xl">health_and_safety</span>
+            </div>
+            <div class="min-w-0">
+              <div class="mb-2 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[.18em] text-emerald-50">
+                <span class="material-symbols-outlined text-xs">verified_user</span>
+                Your personal health profile
+              </div>
+              <h2 id="registration-title" class="text-2xl font-extrabold tracking-tight text-white sm:text-[1.75rem]">Let's Know You</h2>
+              <p class="mt-2 max-w-sm text-sm leading-6 text-emerald-50/90">
+                A few details help us keep your symptom checks and health history connected.
               </p>
             </div>
           </div>
 
-          <div id="facility-list" class="mt-4 divide-y divide-slate-100"></div>
-        </article>
-      </div>
-    </section>
+          <button type="button" id="registration-close"
+            class="relative z-20 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            aria-label="Close registration">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
 
-    <!-- PROFILE / ABOUT DESTINATION -->
-    <section id="profile"
-      class="mt-8 scroll-mt-5 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
-      <div class="flex items-center gap-3">
-        <span class="flex size-11 items-center justify-center rounded-xl bg-emerald-100 text-xl">
-          💚
-        </span>
-        <div>
-          <h2 class="text-lg font-bold">About AutoDoc Nigeria</h2>
-          <p class="text-sm text-slate-500">Built by Team TriTech</p>
+        <div class="relative z-10 mt-6 flex items-center gap-2 text-xs font-semibold text-emerald-50/90">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 text-[10px] font-extrabold">01</span>
+          <span>Basic information</span>
+          <span class="mx-1 h-px flex-1 bg-white/20"></span>
+          <span class="material-symbols-outlined text-base">lock</span>
+          <span>Private and secure</span>
         </div>
       </div>
 
-      <p class="mt-4 text-sm leading-6 text-slate-600">
-        AutoDoc Nigeria aims to make health information and emergency
-        guidance easier to access. It is not a replacement for qualified
-        healthcare professionals.
-      </p>
+      <!-- Free check message -->
+      <div class="mx-5 mt-5 flex items-center gap-3 rounded-2xl border border-emerald-100 bg-gradient-to-r from-emerald-50 to-teal-50 p-3.5 sm:mx-7">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-emerald-700">
+          <span class="material-symbols-outlined text-xl">redeem</span>
+        </div>
+        <div>
+          <p class="text-sm font-extrabold text-emerald-900">Your first symptom check is free</p>
+          <p class="mt-0.5 text-xs leading-5 text-emerald-800">Start by entering your basic details below.</p>
+        </div>
+      </div>
 
-      <button id="privacy-button" type="button"
-        class="mt-4 min-h-11 rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700">
-        Privacy reminder
-      </button>
+      <!-- Registration form -->
+      <div class="flex-1 overflow-y-auto px-5 pb-5 pt-5 sm:px-7">
+        <form id="registration-form" class="space-y-5" novalidate>
 
-      <p id="privacy-message" class="mt-3 text-sm leading-6 text-slate-600" hidden>
-        Share only the health information necessary for guidance. Avoid
-        entering identifying details. Review the application's privacy
-        policy before submitting real health information.
-      </p>
+          <div class="registration-field">
+            <label for="registration-name" class="mb-2 block text-sm font-bold text-slate-800">
+              What should we call you?
+            </label>
+            <div class="relative">
+              <span class="material-symbols-outlined pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-xl text-slate-400">person</span>
+              <input id="registration-name" name="name" type="text" autocomplete="name"
+                maxlength="100" required
+                class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+                placeholder="Enter your full name">
+            </div>
+          </div>
+
+          <div class="registration-field">
+            <label for="registration-phone" class="mb-2 block text-sm font-bold text-slate-800">
+              Phone number
+            </label>
+            <div class="relative">
+              <span class="material-symbols-outlined pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-xl text-slate-400">call</span>
+              <input id="registration-phone" name="phone" type="tel" autocomplete="tel"
+                inputmode="tel" maxlength="25" required
+                class="w-full rounded-2xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+                placeholder="e.g. 0803 000 0000">
+            </div>
+            <p class="mt-2 text-xs leading-5 text-slate-500">
+              Use a number where you can be reached if needed.
+            </p>
+          </div>
+
+          <p id="registration-error" class="hidden rounded-xl border border-red-200 bg-red-50 p-3 text-sm leading-5 text-red-700" role="alert"></p>
+
+          <button id="registration-submit" type="submit"
+            class="flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-700 px-5 py-4 text-sm font-extrabold text-white shadow-lg shadow-emerald-900/15 transition hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200 disabled:cursor-wait disabled:opacity-60">
+            <span id="registration-submit-label">Create my profile</span>
+            <span id="registration-submit-icon" class="material-symbols-outlined text-lg">arrow_forward</span>
+          </button>
+
+   x
+        </form>
+      </div>
     </section>
-  </main>
+  </div>
 
-  <!--
-    MOBILE APP-STYLE BOTTOM NAVIGATION
 
-    Fixed on mobile.
-    Normal footer navigation on medium and larger screens.
-  -->
-  <footer class="fixed inset-x-0 bottom-0 z-50 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:static md:border-t md:bg-white md:pb-0 md:backdrop-blur-none">
-
-    <nav aria-label="Main navigation"
-      class="mx-auto grid max-w-6xl grid-cols-4 px-1 sm:px-4 md:px-6">
-
-      <button type="button" data-target="home" data-nav="home"
-        aria-current="page"
-        class="nav-item flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-emerald-700 transition hover:bg-emerald-50 focus-visible:outline-2 focus-visible:outline-emerald-700 md:my-2">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1.8" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>
-        </svg>
-        <span class="text-[11px] font-bold sm:text-xs">Home</span>
-      </button>
-
-      <button type="button" data-target="guidance" data-nav="guidance"
-        class="nav-item flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-2 focus-visible:outline-emerald-700 md:my-2">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1.8" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M8 4H5a2 2 0 0 0-2 2v14h18V6a2 2 0 0 0-2-2h-3"/>
-          <rect x="8" y="2" width="8" height="5" rx="1.5"/>
-          <path stroke-linecap="round" d="M7 12h10M7 16h7"/>
-        </svg>
-        <span class="text-[11px] font-semibold sm:text-xs">Guidance</span>
-      </button>
-
-      <button type="button" data-target="facilities" data-nav="facilities"
-        class="nav-item flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-2 focus-visible:outline-emerald-700 md:my-2">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1.8" class="size-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M3 21V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14M8 21v-5h8v5"/>
-          <path stroke-linecap="round" d="M12 8v6m-3-3h6"/>
-        </svg>
-        <span class="text-[11px] font-semibold sm:text-xs">Facilities</span>
-      </button>
-
-      <button type="button" data-target="profile" data-nav="profile"
-        class="nav-item flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-2 focus-visible:outline-emerald-700 md:my-2">
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1.8" class="size-6">
-          <circle cx="12" cy="8" r="4"/>
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M4 21a8 8 0 0 1 16 0"/>
-        </svg>
-        <span class="text-[11px] font-semibold sm:text-xs">Profile</span>
-      </button>
-
-    </nav>
-  </footer>
-
-  <script src="assets/js/app.js"></script>
   <script>
-    //const API_URL = new URL("api/triage.php", window.location.href);
-    const API_URL = "https://autodoc.stpfundmanager.store/api/triage.php";
-    
-    const form = document.getElementById("symptom-form");
-    const input = document.getElementById("symptoms");
-    const button = document.getElementById("submit-btn");
-    const buttonText = document.getElementById("button-text");
-    const status = document.getElementById("status");
-    const errorToast = document.getElementById("error-toast");
-    const errorToastMessage = document.getElementById("error-toast-message");
-    const dismissErrorToast = document.getElementById("dismiss-error-toast");
-    const results = document.getElementById("results");
-    let errorToastTimeout;
+    (() => {
+      const welcomeCTA = document.getElementById('welcome-cta');
+      const welcomeCTALabel = document.getElementById('welcome-cta-label');
+      const welcomeCTAIcon = document.getElementById('welcome-cta-icon');
+      const welcomeCTAHint = document.getElementById('welcome-cta-hint');
 
-    function hideErrorToast() {
-      window.clearTimeout(errorToastTimeout);
-      errorToast.hidden = true;
-    }
+      const registrationOverlay = document.getElementById('registration-overlay');
+      const registrationPanel = document.getElementById('registration-panel');
+      const registrationBackdrop = document.getElementById('registration-backdrop');
+      const registrationClose = document.getElementById('registration-close');
 
-    function showErrorToast(message) {
-      window.clearTimeout(errorToastTimeout);
-      errorToastMessage.textContent = message;
-      errorToast.hidden = false;
-      errorToastTimeout = window.setTimeout(() => {
-        errorToast.hidden = true;
-      }, 7000);
-    }
+      const registrationForm = document.getElementById('registration-form');
+      const registrationName = document.getElementById('registration-name');
+      const registrationPhone = document.getElementById('registration-phone');
+      const registrationSubmit = document.getElementById('registration-submit');
+      const registrationSubmitLabel = document.getElementById('registration-submit-label');
+      const registrationSubmitIcon = document.getElementById('registration-submit-icon');
+      const registrationError = document.getElementById('registration-error');
 
-    dismissErrorToast.addEventListener("click", hideErrorToast);
+      let previousFocus = null;
+      let isSubmitting = false;
 
-    const emergencyBanner = document.getElementById("emergency-banner");
-    const emergencyMessage = document.getElementById("emergency-message");
-    const triageCard = document.getElementById("triage-card");
-    const triageLabel = document.getElementById("triage-label");
-    const triageTitle = document.getElementById("triage-title");
-    const triageSummary = document.getElementById("triage-summary");
-    const triageDisclaimer = document.getElementById("triage-disclaimer");
-    const firstAidList = document.getElementById("first-aid-list");
-    const facilityList = document.getElementById("facility-list");
-    const facilityStatus = document.getElementById("facility-status");
 
-    const navItems = document.querySelectorAll(".nav-item");
+      function getStoredUserId() {
+        const value = localStorage.getItem('autodoc_user_id');
 
-    const levels = {
-      green: {
-        title: "🟢 Green — Lower urgency",
-        card: "rounded-2xl border border-emerald-200 border-l-4 border-l-emerald-600 bg-emerald-50 p-5 sm:p-6",
-        label: "text-xs font-bold uppercase tracking-widest text-emerald-800"
-      },
-      yellow: {
-        title: "🟡 Yellow — Medical review needed",
-        card: "rounded-2xl border border-amber-200 border-l-4 border-l-amber-500 bg-amber-50 p-5 sm:p-6",
-        label: "text-xs font-bold uppercase tracking-widest text-amber-800"
-      },
-      red: {
-        title: "🔴 Red — Emergency",
-        card: "rounded-2xl border border-red-200 border-l-4 border-l-red-600 bg-red-50 p-5 sm:p-6",
-        label: "text-xs font-bold uppercase tracking-widest text-red-800"
-      }
-    };
-
-    // MOBILE APP NAVIGATION
-    function setActiveNav(activeName) {
-      navItems.forEach((item) => {
-        const isActive = item.dataset.nav === activeName;
-
-        item.classList.toggle("text-emerald-700", isActive);
-        item.classList.toggle("text-slate-500", !isActive);
-        item.classList.toggle("font-bold", isActive);
-
-        if (isActive) {
-          item.setAttribute("aria-current", "page");
-        } else {
-          item.removeAttribute("aria-current");
+        if (!value || value === 'null' || value === 'undefined') {
+          return null;
         }
-      });
-    }
 
-    function goToSection(target) {
-      const section = document.getElementById(target);
+        const id = Number(value);
 
-      if (!section) return;
+        return Number.isSafeInteger(id) && id > 0 ? id : null;
+      }
 
-      // Results destinations require an assessment first.
-      if (
-        (target === "guidance" || target === "facilities") &&
-        results.hidden
-      ) {
-        status.textContent =
-          "Check your symptoms first to view guidance and facility results.";
+      function updateWelcomeCTA() {
+        const userId = getStoredUserId();
 
-        document.getElementById("symptom-section").scrollIntoView({
-          behavior: "smooth",
-          block: "start"
+        if (userId) {
+          welcomeCTALabel.textContent = 'Continue';
+          welcomeCTAIcon.textContent = 'arrow_forward';
+          welcomeCTAHint.innerHTML = `
+            <span class="material-symbols-outlined text-base text-emerald-700">check_circle</span>
+            Welcome back. Continue to your health dashboard.
+          `;
+        } else {
+          welcomeCTALabel.textContent = "Let's Know You";
+          welcomeCTAIcon.textContent = 'arrow_forward';
+          welcomeCTAHint.innerHTML = `
+            <span class="material-symbols-outlined text-base text-emerald-700">lock</span>
+            A quick setup to keep your health records connected.
+          `;
+        }
+      }
+
+      function showRegistrationError(message) {
+        registrationError.textContent = message;
+        registrationError.classList.remove('hidden');
+      }
+
+      function clearRegistrationError() {
+        registrationError.textContent = '';
+        registrationError.classList.add('hidden');
+      }
+
+      function showRegistrationModal() {
+        if (isSubmitting) return;
+
+        previousFocus = document.activeElement;
+        clearRegistrationError();
+
+        registrationOverlay.classList.add('sheet-open');
+        registrationOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+
+        window.setTimeout(() => {
+          registrationName.focus();
+        }, 100);
+      }
+
+      function hideRegistrationModal() {
+        if (isSubmitting) return;
+
+        registrationOverlay.classList.remove('sheet-open');
+        registrationOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+
+        if (previousFocus && document.contains(previousFocus)) {
+          previousFocus.focus();
+        }
+      }
+
+      function setSubmitting(submitting) {
+        isSubmitting = submitting;
+        registrationSubmit.disabled = submitting;
+        registrationSubmitLabel.textContent = submitting
+          ? 'Creating your profile…'
+          : 'Create my profile';
+
+        registrationSubmitIcon.textContent = submitting
+          ? 'progress_activity'
+          : 'arrow_forward';
+
+        registrationSubmitIcon.classList.toggle('animate-spin', submitting);
+      }
+
+      function getCoordinates() {
+        return new Promise(resolve => {
+          if (!navigator.geolocation) {
+            resolve({ lat: null, lng: null });
+            return;
+          }
+
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              resolve({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              });
+            },
+            () => resolve({ lat: null, lng: null }),
+            {
+              enableHighAccuracy: false,
+              timeout: 5000,
+              maximumAge: 60000
+            }
+          );
         });
-
-        setActiveNav("home");
-        input.focus({ preventScroll: true });
-        return;
       }
 
-      section.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+      async function registerUser(name, phone) {
+        // Location is optional. Registration continues if permission is declined.
+        const coordinates = await getCoordinates();
 
-      setActiveNav(
-        target === "guidance" || target === "facilities"
-          ? target
-          : target === "profile"
-            ? "profile"
-            : "home"
-      );
-    }
-
-    navItems.forEach((item) => {
-      item.addEventListener("click", () => {
-        goToSection(item.dataset.target);
-      });
-    });
-
-    // SYMPTOM FORM / PHP BACKEND
-    form.addEventListener("submit", async (event) => {
-      event.preventDefault();
-
-      const symptoms = input.value.trim();
-
-      if (!symptoms) {
-        showErrorToast("Please describe your symptoms first.");
-        input.focus();
-        return;
-      }
-
-      hideErrorToast();
-      button.disabled = true;
-      buttonText.textContent = "Checking...";
-      status.textContent = "Contacting the health service...";
-      results.hidden = true;
-
-      try {
-        const coordinates = await getUserCoordinates();
-        const response = await fetch(API_URL, {
-          method: "POST",
+        const response = await fetch('https://autodoc.stpfundmanager.store/api/register_user.php', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
-          body: JSON.stringify({ symptoms, ...coordinates })
+          body: JSON.stringify({
+            name,
+            phone,
+            ...coordinates
+          })
         });
 
         let data;
+
         try {
           data = await response.json();
         } catch {
+          throw new Error('The server response was invalid. Please try again.');
+        }
+
+        if (!response.ok || !data.success) {
           throw new Error(
-            `The health service returned an invalid response (HTTP ${response.status}).`
+            typeof data.error === 'string'
+              ? data.error
+              : 'Unable to create your account. Please try again.'
           );
         }
 
-        if (!response.ok) {
-          throw new Error(
-            data.error || `The health service returned HTTP ${response.status}.`
+        const userId = Number(data.user_id);
+
+        if (!Number.isSafeInteger(userId) || userId <= 0) {
+          throw new Error('Your profile was not assigned a valid user ID. Please contact support.');
+        }
+
+        // Save the profile only after the server confirms registration.
+        localStorage.setItem('autodoc_user_id', String(userId));
+        localStorage.setItem('autodoc_user_profile', JSON.stringify({
+          user_id: userId,
+          name,
+          phone,
+          lat: coordinates.lat,
+          lng: coordinates.lng
+        }));
+
+        // Move into the app after successful registration.
+        window.location.href = 'home.html';
+      }
+
+      welcomeCTA.addEventListener('click', () => {
+        const userId = getStoredUserId();
+
+        if (userId) {
+          window.location.href = 'home.html';
+        } else {
+          showRegistrationModal();
+        }
+      });
+
+      registrationForm.addEventListener('submit', async event => {
+        event.preventDefault();
+
+        if (isSubmitting) return;
+
+        clearRegistrationError();
+
+        const name = registrationName.value.trim();
+        const phone = registrationPhone.value.trim();
+
+        if (!name) {
+          showRegistrationError('Please enter your name.');
+          registrationName.focus();
+          return;
+        }
+
+        if (!phone) {
+          showRegistrationError('Please enter your phone number.');
+          registrationPhone.focus();
+          return;
+        }
+
+        if (phone.replace(/\D/g, '').length < 7) {
+          showRegistrationError('Please enter a valid phone number.');
+          registrationPhone.focus();
+          return;
+        }
+
+        setSubmitting(true);
+
+        try {
+          await registerUser(name, phone);
+        } catch (error) {
+          showRegistrationError(
+            error.message || 'Unable to save your profile. Please try again.'
           );
+          setSubmitting(false);
+        }
+      });
+
+      registrationClose.addEventListener('click', hideRegistrationModal);
+      registrationBackdrop.addEventListener('click', hideRegistrationModal);
+
+      document.addEventListener('keydown', event => {
+        if (!registrationOverlay.classList.contains('sheet-open')) return;
+
+        if (event.key === 'Escape') {
+          hideRegistrationModal();
         }
 
-        renderResults(data);
+        // Keep keyboard navigation within the registration dialog.
+        if (event.key === 'Tab') {
+          const focusable = registrationPanel.querySelectorAll(
+            'button:not([disabled]), input:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+          );
 
-        results.hidden = false;
-        status.textContent =
-          "Assessment received. Review the guidance carefully.";
+          if (!focusable.length) return;
 
-        setActiveNav("guidance");
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
 
-        results.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-      } catch (error) {
-        status.textContent = "";
-        showErrorToast(
-          error instanceof Error && error.message
-            ? error.message
-            : "Unable to connect. Please try again."
-        );
-      } finally {
-        button.disabled = false;
-        buttonText.textContent = "Check my symptoms";
-      }
-    });
-
-    // SAFELY DISPLAY BACKEND JSON
-    function renderResults(data) {
-      if (!data || typeof data !== "object") {
-        throw new Error("The server returned an invalid response.");
-      }
-
-      const level = String(data.level || "").toLowerCase();
-
-      if (!Object.prototype.hasOwnProperty.call(levels, level)) {
-        throw new Error("The server returned an invalid urgency level.");
-      }
-
-      const config = levels[level];
-
-      triageCard.className = config.card;
-      triageLabel.className = config.label;
-      triageLabel.textContent = "Urgency assessment";
-      triageTitle.textContent = config.title;
-
-      triageSummary.textContent =
-        data.summary || "Please seek appropriate medical advice.";
-
-      triageDisclaimer.textContent =
-        data.disclaimer || "This is not a medical diagnosis.";
-
-      emergencyBanner.hidden = level !== "red";
-
-      if (level === "red") {
-        emergencyMessage.textContent =
-          data.emergency_message ||
-          "Seek emergency medical assistance immediately.";
-      }
-
-      firstAidList.replaceChildren();
-
-      const steps = Array.isArray(data.first_aid)
-        ? data.first_aid
-        : [];
-
-      if (steps.length === 0) {
-        const item = document.createElement("li");
-        item.textContent =
-          "Follow advice from a qualified healthcare professional.";
-        firstAidList.appendChild(item);
-      } else {
-        steps.forEach((step) => {
-          const item = document.createElement("li");
-          item.textContent = String(step);
-          firstAidList.appendChild(item);
-        });
-      }
-
-      facilityList.replaceChildren();
-
-      const facilities = Array.isArray(data.nearby_facilities)
-        ? data.nearby_facilities
-        : Array.isArray(data.facilities)
-          ? data.facilities
-          : [];
-
-      facilityStatus.textContent =
-        data.facility_source === "local_fallback"
-          ? "Local Ado-Ekiti suggestions — confirm details before travelling."
-          : data.facility_source === "google_places"
-            ? "Nearby results from Google Maps."
-            : "Nearby facility search is currently unavailable.";
-
-      if (facilities.length === 0) {
-        facilityList.textContent =
-          data.facility_source === "unavailable"
-            ? "No nearby facility information could be retrieved."
-            : "No nearby facilities were found.";
-      }
-
-      facilities.forEach((facility) => {
-        const item = document.createElement("div");
-        item.className = "py-4";
-
-        const name = document.createElement("h3");
-        name.className = "font-bold text-slate-800";
-        name.textContent = String(
-          facility.name || "Health facility"
-        );
-
-        const address = document.createElement("p");
-        address.className = "mt-1 text-sm leading-6 text-slate-600";
-        address.textContent = String(
-          facility.address || "Address unavailable"
-        );
-
-        item.append(name, address);
-
-        if (facility.rating !== undefined) {
-          const rating = document.createElement("p");
-          rating.className = "mt-1 text-sm text-slate-600";
-          rating.textContent = `Rating: ${facility.rating}`;
-          item.appendChild(rating);
-        }
-
-        if (typeof facility.open_now === "string") {
-          const openingStatus = document.createElement("p");
-          openingStatus.className = "mt-1 text-sm text-slate-600";
-          openingStatus.textContent = facility.open_now;
-          item.appendChild(openingStatus);
-        }
-
-        const facilityUrl = facility.map_link || facility.url;
-        if (typeof facilityUrl === "string") {
-          try {
-            const url = new URL(facilityUrl);
-
-            if (url.protocol === "https:") {
-              const link = document.createElement("a");
-              link.href = url.href;
-              link.target = "_blank";
-              link.rel = "noopener noreferrer";
-              link.className =
-                "mt-2 inline-block min-h-11 py-2 font-semibold text-emerald-700 underline";
-              link.textContent = "View facility information";
-              item.appendChild(link);
-            }
-          } catch {
-            // Ignore malformed facility links.
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
           }
         }
-
-        facilityList.appendChild(item);
       });
-    }
 
-    // PROFILE / PRIVACY REMINDER
-    const privacyButton = document.getElementById("privacy-button");
-    const privacyMessage = document.getElementById("privacy-message");
+      // Determine the correct CTA as soon as the page is ready.
+      updateWelcomeCTA();
 
-    privacyButton.addEventListener("click", () => {
-      privacyMessage.hidden = !privacyMessage.hidden;
-
-      privacyButton.textContent = privacyMessage.hidden
-        ? "Privacy reminder"
-        : "Hide privacy reminder";
-    });
+      // Refresh the CTA if another tab changes the stored account.
+      window.addEventListener('storage', event => {
+        if (event.key === 'autodoc_user_id') {
+          updateWelcomeCTA();
+        }
+      });
+    })();
   </script>
+  
+<script>
+(() => {
+    const loader = document.getElementById('app-loader');
+
+    if (!loader) return;
+
+    // Keep the loader visible briefly, then reveal the welcome screen.
+    window.addEventListener('load', () => {
+        window.setTimeout(() => {
+            loader.classList.add('is-hidden');
+
+            // Remove it after the fade-out animation.
+            window.setTimeout(() => {
+                loader.remove();
+            }, 500);
+        }, 2000);
+    }, { once: true });
+})();
+</script>
 
 </body>
 </html>

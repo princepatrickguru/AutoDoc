@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoDoc Nigeria | Profile</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <header class="bg-emerald-700 text-white">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
+      <a href="home.html" class="flex min-w-0 items-center gap-3">
+        <span class="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-white text-2xl text-emerald-700">✚</span>
+        <span class="min-w-0">
+          <span class="block text-lg font-extrabold tracking-tight sm:text-xl">AutoDoc Nigeria</span>
+          <span class="block text-xs text-emerald-100">Your health companion</span>
+        </span>
+      </a>
+
+      <a href="home.html" class="rounded-full bg-white/10 px-3 py-2 text-xs font-semibold text-white hover:bg-white/20">
+        Back to home
+      </a>
+    </nav>
+  </header>
+
+
+<main class="relative mx-auto w-full max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+
+  <!-- Background Accent -->
+  <div class="pointer-events-none absolute right-8 top-12 -z-10 size-48 rounded-full bg-emerald-100/60 blur-3xl"></div>
+
+  <section class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_20px_70px_-25px_rgba(15,23,42,0.15)]">
+
+    <!-- Profile Header -->
+    <div class="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-800 px-6 py-8 sm:px-10 sm:py-10">
+      <div class="pointer-events-none absolute -right-12 -top-20 size-64 rounded-full border border-white/10"></div>
+      <div class="pointer-events-none absolute -right-2 -top-10 size-44 rounded-full border border-white/10"></div>
+      <div class="pointer-events-none absolute bottom-0 right-24 size-32 rounded-full bg-emerald-400/10 blur-2xl"></div>
+
+      <div class="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+
+        <div class="flex items-center gap-4">
+          <div class="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/15 bg-white/10 text-3xl shadow-lg backdrop-blur-md">
+            <img id="profile-avatar" alt="Profile" class="hidden h-full w-full object-cover" />
+            <span id="profile-avatar-placeholder" class="text-3xl">👤</span>
+          </div>
+
+          <div>
+            <div class="mb-2 flex items-center gap-2">
+              <span class="size-2 rounded-full bg-emerald-400"></span>
+              <p class="text-xs font-bold uppercase tracking-[0.22em] text-emerald-200">
+                My Account
+              </p>
+            </div>
+
+            <h1 id="profile-page-title" class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+              My details
+            </h1>
+
+            <p class="mt-2 max-w-md text-sm leading-6 text-emerald-100/80">
+              Manage your personal information and keep your profile up to date.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2 sm:items-end">
+          <div class="flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-emerald-50 backdrop-blur-md">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.75a4.75 4.75 0 0 1 4.75 4.75A4.75 4.75 0 0 1 12 12.25 4.75 4.75 0 0 1 7.25 7.5 4.75 4.75 0 0 1 12 2.75Zm-7 16.5c0-2.76 2.24-5 5-5h4c2.76 0 5 2.24 5 5v.5H5v-.5Z"/>
+            </svg>
+            Personal profile
+          </div>
+
+          <div class="flex items-center gap-2">
+            <label for="profile-image-input" class="inline-flex cursor-pointer items-center justify-center rounded-xl border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/20">
+              Upload photo
+            </label>
+            <input id="profile-image-input" type="file" accept="image/*" class="hidden" />
+            <button id="edit-profile-button" type="button" class="rounded-xl border border-white/15 bg-transparent px-3 py-2 text-xs font-semibold text-emerald-50 transition hover:bg-white/10">
+              Edit Profile
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="p-5 sm:p-8 lg:p-10">
+
+      <div class="mb-6 flex items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Personal information</h2>
+          <p class="mt-1 text-sm text-slate-500">
+            Your registered contact and location details.
+          </p>
+        </div>
+
+        <span class="hidden rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-500 sm:inline-flex">
+          PROFILE DETAILS
+        </span>
+      </div>
+
+      <div id="profile-card" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+        <!-- Name -->
+        <div class="group rounded-2xl border border-slate-200 bg-slate-50/70 p-5 transition duration-200 hover:border-emerald-200 hover:bg-emerald-50/40 hover:shadow-sm">
+          <div class="flex items-start gap-4">
+            <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 transition group-hover:bg-emerald-200">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 12a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-6 7.25a6 6 0 0 1 12 0"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Full name</p>
+              <p id="profile-name" class="mt-2 break-words text-base font-semibold text-slate-900">Not set</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="group rounded-2xl border border-slate-200 bg-slate-50/70 p-5 transition duration-200 hover:border-emerald-200 hover:bg-emerald-50/40 hover:shadow-sm">
+          <div class="flex items-start gap-4">
+            <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 transition group-hover:bg-emerald-200">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5.5 4.5a2 2 0 0 1 2-2h2.1a1 1 0 0 1 .98.8l.6 3.8a1 1 0 0 1-.28.9l-1.52 1.52a13.12 13.12 0 0 0 7.52 7.52l1.52-1.52a1 1 0 0 1 .9-.28l3.8.6a1 1 0 0 1 .8.98v2.1a2 2 0 0 1-2 2h-1.2C13.42 21.5 2.5 10.58 2.5 5.7v-1.2Z"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Phone number</p>
+              <p id="profile-phone" class="mt-2 break-words text-base font-semibold text-slate-900">Not set</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="group rounded-2xl border border-slate-200 bg-slate-50/70 p-5 transition duration-200 hover:border-emerald-200 hover:bg-emerald-50/40 hover:shadow-sm">
+          <div class="flex items-start gap-4">
+            <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 transition group-hover:bg-emerald-200">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.5 6.5A2.5 2.5 0 0 1 6 4h12a2.5 2.5 0 0 1 2.5 2.5v11A2.5 2.5 0 0 1 18 20H6a2.5 2.5 0 0 1-2.5-2.5v-11Zm0 0 8.5 6.5L20.5 6.5"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Email address</p>
+              <p id="profile-email" class="mt-2 break-words text-base font-semibold text-slate-900">Not set</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="group rounded-2xl border border-slate-200 bg-slate-50/70 p-5 transition duration-200 hover:border-emerald-200 hover:bg-emerald-50/40 hover:shadow-sm">
+          <div class="flex items-start gap-4">
+            <div class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800 transition group-hover:bg-emerald-200">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s6-5.5 6-11a6 6 0 1 0-12 0c0 5.5 6 11 6 11Zm0-8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+              </svg>
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Location</p>
+              <p id="profile-location" class="mt-2 break-words text-base font-semibold text-slate-900">Not set</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Privacy Note -->
+      <div class="mt-6 flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="mt-0.5 size-5 text-slate-500">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 10.5V8a5 5 0 0 1 10 0v2.5M6 10.5h12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 18 19.5H6A1.5 1.5 0 0 1 4.5 18v-6A1.5 1.5 0 0 1 6 10.5Z"/>
+        </svg>
+        <div>
+          <p class="text-sm font-semibold text-slate-800">Your information matters</p>
+          <p class="mt-1 text-sm leading-6 text-slate-500">
+            Review your details regularly to help keep your contact information accurate.
+          </p>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-8 flex justify-end border-t border-slate-100 pt-6">
+        <button
+          id="go-home"
+          type="button"
+          class="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-emerald-700 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/15 transition duration-200 hover:-translate-y-0.5 hover:bg-emerald-800 hover:shadow-xl active:translate-y-0"
+        >
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 11.5 12 4l9 7.5V19a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1v-7.5Z"/>
+          </svg>
+          Back to home
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="size-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+  <div id="edit-profile-modal" class="fixed inset-0 z-50 hidden items-end justify-center bg-slate-950/55 px-3 pb-0 pt-8 backdrop-blur-[2px] sm:items-center sm:px-4">
+    <div class="w-full max-w-lg rounded-t-[2rem] border border-slate-200 bg-white p-5 shadow-2xl sm:rounded-[2rem]">
+      <div class="mx-auto mb-5 flex w-12 items-center justify-center rounded-full bg-slate-100 py-1.5">
+        <span class="block h-1.5 w-8 rounded-full bg-slate-300"></span>
+      </div>
+
+      <div class="mb-5 flex items-start justify-between gap-4">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.2em] text-emerald-700">Edit profile</p>
+          <h2 class="mt-2 text-2xl font-extrabold text-slate-900">Update your details</h2>
+        </div>
+        <button id="close-edit-profile-modal" type="button" class="rounded-full bg-slate-100 px-2.5 py-1.5 text-lg text-slate-700 hover:bg-slate-200">×</button>
+      </div>
+
+      <form id="edit-profile-form" class="space-y-4">
+        <div>
+          <label for="edit-profile-name" class="mb-2 block text-sm font-semibold text-slate-700">Full name</label>
+          <input id="edit-profile-name" name="name" type="text" required class="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" placeholder="Enter your full name" />
+        </div>
+
+        <div>
+          <label for="edit-profile-phone" class="mb-2 block text-sm font-semibold text-slate-700">Phone number</label>
+          <input id="edit-profile-phone" name="phone" type="tel" required class="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" placeholder="0803 000 0000" />
+        </div>
+
+        <div>
+          <label for="edit-profile-email" class="mb-2 block text-sm font-semibold text-slate-700">Email address</label>
+          <input id="edit-profile-email" name="email" type="email" class="w-full rounded-xl border border-slate-300 bg-white px-3 py-3 text-base outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" placeholder="you@example.com" />
+        </div>
+
+        <div>
+          <label for="edit-profile-location" class="mb-2 block text-sm font-semibold text-slate-700">Location</label>
+          <input id="edit-profile-location" name="location" type="text" readonly class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-3 text-base text-slate-700 outline-none transition focus:border-emerald-600 focus:ring-4 focus:ring-emerald-100" placeholder="Detecting your location..." />
+        </div>
+
+        <div class="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+          <button id="cancel-edit-profile" type="button" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-700 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-900/15 transition hover:bg-emerald-800">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // const PROFILE_UPLOAD_URL = new URL('api/update_profile_photo.php', window.location.href);
+    // const PROFILE_UPDATE_URL = new URL('api/update_profile.php', window.location.href);
+    const PROFILE_UPLOAD_URL = new URL('https://autodoc.stpfundmanager.store/api/update_profile_photo.php', window.location.href);
+    const PROFILE_UPDATE_URL = new URL('https://autodoc.stpfundmanager.store/api/update_profile.php', window.location.href);
+
+    const profilePageTitle = document.getElementById('profile-page-title');
+    const profileName = document.getElementById('profile-name');
+    const profilePhone = document.getElementById('profile-phone');
+    const profileEmail = document.getElementById('profile-email');
+    const profileLocation = document.getElementById('profile-location');
+    const profileAvatar = document.getElementById('profile-avatar');
+    const profileAvatarPlaceholder = document.getElementById('profile-avatar-placeholder');
+    const profileImageInput = document.getElementById('profile-image-input');
+    const editProfileButton = document.getElementById('edit-profile-button');
+    const editProfileModal = document.getElementById('edit-profile-modal');
+    const closeEditProfileModalButton = document.getElementById('close-edit-profile-modal');
+    const cancelEditProfile = document.getElementById('cancel-edit-profile');
+    const editProfileForm = document.getElementById('edit-profile-form');
+    const editProfileName = document.getElementById('edit-profile-name');
+    const editProfilePhone = document.getElementById('edit-profile-phone');
+    const editProfileEmail = document.getElementById('edit-profile-email');
+    const editProfileLocation = document.getElementById('edit-profile-location');
+    const goHome = document.getElementById('go-home');
+
+    function readStoredUserId() {
+      const value = localStorage.getItem('autodoc_user_id');
+      return value && value !== 'null' && value !== 'undefined' ? Number(value) : null;
+    }
+
+    function readStoredUserProfile() {
+      try {
+        const profile = JSON.parse(localStorage.getItem('autodoc_user_profile') || 'null');
+        return profile && typeof profile === 'object' ? profile : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function formatLocationString(lat, lng) {
+      if (lat === null || lat === undefined || lng === null || lng === undefined || Number.isNaN(Number(lat)) || Number.isNaN(Number(lng))) {
+        return '';
+      }
+
+      return `${Number(lat).toFixed(6)}, ${Number(lng).toFixed(6)}`;
+    }
+
+    function getStoredLocationValue(profile = null) {
+      const source = profile || readStoredUserProfile() || {};
+      const locationValue = source.location || '';
+      const lat = source.lat ?? null;
+      const lng = source.lng ?? null;
+
+      if (locationValue) {
+        return locationValue;
+      }
+
+      return lat !== null && lng !== null ? formatLocationString(lat, lng) : '';
+    }
+
+    function requestCurrentLocation() {
+      return new Promise((resolve) => {
+        if (!navigator.geolocation) {
+          resolve(null);
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            });
+          },
+          () => {
+            resolve(null);
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 60000
+          }
+        );
+      });
+    }
+
+    async function syncLocationFieldFromGeo() {
+      const profile = readStoredUserProfile() || {};
+      let coordinates = null;
+
+      if (navigator.geolocation) {
+        coordinates = await requestCurrentLocation();
+      }
+
+      if (coordinates) {
+        editProfileLocation.value = formatLocationString(coordinates.lat, coordinates.lng);
+        return coordinates;
+      }
+
+      const existing = getStoredLocationValue(profile);
+      editProfileLocation.value = existing;
+      return existing ? {
+        lat: profile.lat ?? null,
+        lng: profile.lng ?? null
+      } : null;
+    }
+
+    async function updateServerProfileImage(remove = false, file = null) {
+      const userId = readStoredUserId();
+
+      if (!userId) {
+        alert('Please create a profile before uploading a photo.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('user_id', String(userId));
+
+      if (remove) {
+        formData.append('remove', '1');
+      } else if (file) {
+        formData.append('photo', file);
+      } else {
+        return;
+      }
+
+      try {
+        const response = await fetch(PROFILE_UPLOAD_URL, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to update the profile photo.');
+        }
+
+        const profile = readStoredUserProfile() || {};
+        profile.image = remove ? '' : (data.photo_path || profile.image || '');
+        localStorage.setItem('autodoc_user_profile', JSON.stringify(profile));
+        renderProfile();
+      } catch (error) {
+        alert(error instanceof Error ? error.message : 'Unable to update the profile photo.');
+      }
+    }
+
+    function renderProfile() {
+      const profile = readStoredUserProfile();
+
+      const name = profile?.name || 'My details';
+      profilePageTitle.textContent = name;
+
+      if (!profile) {
+        profileName.textContent = 'Not set';
+        profilePhone.textContent = 'Not set';
+        profileEmail.textContent = 'Not set';
+        profileLocation.textContent = 'Not set';
+        profileAvatar.removeAttribute('src');
+        profileAvatar.classList.add('hidden');
+        profileAvatarPlaceholder.classList.remove('hidden');
+        return;
+      }
+
+      profileName.textContent = profile.name || 'Not set';
+      profilePhone.textContent = profile.phone || 'Not set';
+      profileEmail.textContent = profile.email || 'Not set';
+
+      const locationValue = getStoredLocationValue(profile) || 'Not set';
+      profileLocation.textContent = locationValue;
+
+      const imageData = profile.image || '';
+      if (imageData) {
+        profileAvatar.src = imageData;
+        profileAvatar.classList.remove('hidden');
+        profileAvatarPlaceholder.classList.add('hidden');
+      } else {
+        profileAvatar.removeAttribute('src');
+        profileAvatar.classList.add('hidden');
+        profileAvatarPlaceholder.classList.remove('hidden');
+      }
+    }
+
+    async function openEditProfileModal() {
+      const profile = readStoredUserProfile() || {};
+      editProfileName.value = profile.name || '';
+      editProfilePhone.value = profile.phone || '';
+      editProfileEmail.value = profile.email || '';
+      editProfileLocation.value = getStoredLocationValue(profile) || 'Detecting your location...';
+      editProfileModal.classList.remove('hidden');
+      editProfileModal.classList.add('flex');
+
+      await syncLocationFieldFromGeo();
+    }
+
+    function closeEditProfileModal() {
+      editProfileModal.classList.add('hidden');
+      editProfileModal.classList.remove('flex');
+    }
+
+    profileImageInput.addEventListener('change', async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      await updateServerProfileImage(false, file);
+      event.target.value = '';
+    });
+
+    editProfileButton.addEventListener('click', openEditProfileModal);
+    closeEditProfileModalButton.addEventListener('click', closeEditProfileModal);
+    cancelEditProfile.addEventListener('click', closeEditProfileModal);
+
+    editProfileForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const userId = readStoredUserId();
+      const profile = readStoredUserProfile() || {};
+      const nextCoordinates = await syncLocationFieldFromGeo();
+      const locationValue = nextCoordinates
+        ? formatLocationString(nextCoordinates.lat, nextCoordinates.lng)
+        : (editProfileLocation.value || '').trim();
+
+      const updatedProfile = {
+        ...profile,
+        name: editProfileName.value.trim(),
+        phone: editProfilePhone.value.trim(),
+        email: editProfileEmail.value.trim(),
+        location: locationValue,
+        lat: nextCoordinates ? Number(nextCoordinates.lat) : (profile.lat ?? null),
+        lng: nextCoordinates ? Number(nextCoordinates.lng) : (profile.lng ?? null)
+      };
+
+      try {
+        const response = await fetch(PROFILE_UPDATE_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            user_id: userId,
+            name: updatedProfile.name,
+            phone: updatedProfile.phone,
+            email: updatedProfile.email,
+            lat: updatedProfile.lat,
+            lng: updatedProfile.lng
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Unable to update profile.');
+        }
+
+        localStorage.setItem('autodoc_user_profile', JSON.stringify(updatedProfile));
+        renderProfile();
+        closeEditProfileModal();
+      } catch (error) {
+        alert(error instanceof Error ? error.message : 'Unable to update profile.');
+      }
+    });
+
+    goHome.addEventListener('click', () => {
+      window.location.href = 'home.html';
+    });
+
+    renderProfile();
+  </script>
+</body>
+</html>
